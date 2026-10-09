@@ -1,160 +1,289 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#172554">
-<title>Friendship | Nova</title>
+<title>Nova | Friendship Quiz</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;color:#fff;background:linear-gradient(135deg,#101d46,#3730a3,#2563eb)}
+body{min-height:100vh;min-height:100dvh;overflow-x:hidden;font-family:Arial,sans-serif;color:white;background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);display:flex;align-items:center;justify-content:center;padding:75px 0 65px}
 .glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;animation:glowMove 8s infinite alternate ease-in-out}
-.glow.one{background:#60a5fa;top:-70px;right:-60px}.glow.two{background:#a78bfa;bottom:-80px;left:-60px;animation-delay:-4s}
+.one{background:#60a5fa;top:-70px;right:-60px}.two{background:#a78bfa;bottom:-80px;left:-60px}
 @keyframes glowMove{to{transform:translate(35px,35px) scale(1.2)}}
-.change-name{position:fixed;top:18px;right:16px;z-index:20;padding:11px 15px;border:1px solid #ffffff40;border-radius:14px;color:#fff;background:#ffffff18;backdrop-filter:blur(12px);font-size:13px;cursor:pointer;transition:.25s}
-.change-name:hover{background:#ffffff30;transform:translateY(-2px)}
-.name-panel{position:fixed;top:70px;right:16px;width:min(290px,calc(100vw - 32px));padding:18px;border:1px solid #ffffff35;border-radius:20px;background:#172554ee;backdrop-filter:blur(18px);box-shadow:0 15px 40px #0004;z-index:30;opacity:0;visibility:hidden;transform:translateY(-12px) scale(.95);transition:.3s ease}
-.name-panel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
-.name-panel h3{margin-bottom:12px;font-size:16px}
-.name-panel input{width:100%;padding:12px;border:1px solid #ffffff40;border-radius:12px;outline:none;color:white;background:#ffffff12;font-size:15px;margin-bottom:10px}
-.name-panel input::placeholder{color:#cbd5e1}
-.save-name{width:100%;padding:11px;border:0;border-radius:12px;color:#172554;background:#bfdbfe;font-weight:bold;cursor:pointer}
-.card{position:relative;z-index:2;width:min(420px,91vw);padding:34px 22px;text-align:center;border:1px solid #ffffff35;border-radius:28px;background:#ffffff13;backdrop-filter:blur(20px);box-shadow:0 20px 70px #0003;animation:cardEnter .8s ease both}
-@keyframes cardEnter{from{opacity:0;transform:translateY(25px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-.bears{font-size:55px;margin-bottom:15px;animation:bearFloat 3s infinite ease-in-out}
-@keyframes bearFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-h1{font-size:clamp(24px,6vw,32px);margin-bottom:13px;line-height:1.5}
-.description{color:#e0e7ff;font-size:15px;line-height:1.9;margin-bottom:25px}
-.buttons-area{position:relative;width:100%;height:60px;overflow:visible;display:flex;align-items:center;justify-content:center}
-.buttons{display:flex;justify-content:center;align-items:center;gap:12px;width:100%;height:60px}
-.btn{min-width:105px;padding:13px 20px;border:0;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;transition:transform .2s,background .2s;touch-action:manipulation}
-.btn:active{transform:scale(.95)}
-.yes{color:#172554;background:#bfdbfe;box-shadow:0 5px 18px #60a5fa35}.yes:hover{background:#dbeafe}
-.no{color:#fff;background:#ffffff20;border:1px solid #ffffff50}
-.no.running{position:absolute;margin:0;z-index:5;will-change:left,top,transform;transition:left .24s cubic-bezier(.2,.8,.2,1),top .24s cubic-bezier(.2,.8,.2,1),transform .18s ease}
-.result{display:none;animation:cardEnter .5s ease both}
-.result .big-bear{font-size:65px;margin-bottom:12px}
-.result h2{margin-bottom:12px;font-size:25px}
-.result p{line-height:1.9;color:#e0e7ff}
-.again{margin-top:20px;padding:11px 20px;border:1px solid #ffffff45;border-radius:12px;color:white;background:#ffffff18;cursor:pointer}
-.nova-brand{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;backdrop-filter:blur(12px);box-shadow:0 4px 20px #0002;color:white;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
-.nova-brand span{color:#93c5fd}
-.float-bear{position:fixed;bottom:-40px;z-index:1;pointer-events:none;animation:bearRise 6s linear forwards;opacity:.7}
-@keyframes bearRise{0%{transform:translateY(0) rotate(-10deg);opacity:0}15%{opacity:.7}100%{transform:translateY(-110vh) rotate(15deg);opacity:0}}
-@media(max-width:360px){.card{padding:28px 15px}.btn{min-width:95px;padding:12px 15px}.buttons{gap:9px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+.change-name{position:fixed;top:16px;right:14px;z-index:20;padding:10px 13px;border:1px solid #ffffff40;border-radius:13px;color:white;background:#ffffff18}
+.name-panel{position:fixed;top:65px;right:14px;width:min(290px,calc(100vw - 28px));padding:17px;border:1px solid #ffffff35;border-radius:20px;background:#172554f5;z-index:30;display:none}
+.name-panel.open{display:block;animation:enter .3s ease}
+.name-panel h3{margin-bottom:12px}
+input,textarea{width:100%;padding:12px;margin-top:7px;margin-bottom:12px;border:1px solid #ffffff40;border-radius:12px;color:white;background:#ffffff12;outline:none;font-size:15px;font-family:inherit}
+input::placeholder,textarea::placeholder{color:#cbd5e1}
+textarea{resize:vertical;min-height:75px}
+.card{position:relative;z-index:2;width:min(440px,92vw);padding:27px 21px;text-align:center;border:1px solid #ffffff35;border-radius:27px;background:#ffffff13;backdrop-filter:blur(20px);box-shadow:0 20px 70px #0003;animation:enter .7s ease}
+@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.bears{font-size:48px;margin-bottom:12px;animation:float 3s infinite ease-in-out}
+@keyframes float{50%{transform:translateY(-7px)}}
+h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
+.desc{font-size:14px;color:#e0e7ff;line-height:1.9;margin-bottom:18px}
+.btn{width:100%;padding:13px 15px;border:0;border-radius:13px;font-size:15px;font-weight:bold;margin-top:8px;transition:transform .2s}
+.btn:active{transform:scale(.97)}
+.primary{color:#172554;background:#bfdbfe}
+.secondary{color:white;background:#ffffff20;border:1px solid #ffffff45}
+.danger{color:white;background:#be123c}
+.hidden{display:none!important}
+.label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:5px}
+.counter{font-size:12px;color:#bfdbfe;margin:10px 0}
+.question-box{padding:17px 13px;border:1px solid #ffffff30;border-radius:16px;background:#ffffff10;font-size:19px;font-weight:bold;line-height:1.8;margin:18px 0}
+.notice{margin-top:13px;padding:14px;border-radius:15px;background:#ffffff13;line-height:1.8;animation:enter .35s ease}
+.brand{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;color:white;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
+.brand span{color:#93c5fd}
+.float-bear{position:fixed;bottom:-40px;z-index:5;pointer-events:none;animation:rise 5s linear forwards}
+@keyframes rise{to{transform:translateY(-110vh) rotate(18deg);opacity:0}}
+@media(max-width:360px){.card{padding:23px 15px}}
 </style>
 </head>
 <body>
 <div class="glow one"></div><div class="glow two"></div>
-<button class="change-name" id="changeName" type="button">✏️ تغيير الاسم</button>
+
+<button class="change-name" id="changeName">✏️ تغيير الاسم</button>
 <div class="name-panel" id="namePanel">
-  <h3>✨ غيّر الاسم</h3>
-  <input id="nameInput" type="text" maxlength="30" placeholder="اكتب الاسم هنا...">
-  <button class="save-name" id="saveName" type="button">حفظ الاسم ✓</button>
+<h3>✨ اسم الصديق</h3>
+<input id="nameInput" maxlength="30" placeholder="اكتب الاسم...">
+<button class="btn primary" id="saveName">حفظ الاسم ✓</button>
 </div>
+
 <main class="card">
-  <section id="question">
-    <div class="bears">🧸🤍🧸</div>
-    <h1>هل تحب <span id="personName">نوري</span>؟</h1>
-    <p class="description">الصداقة الحقيقية كنز جميل ✨<br>خلّينا نشوف جوابك!</p>
-    <div class="buttons-area" id="buttonsArea">
-      <div class="buttons" id="buttons">
-        <button class="btn yes" id="yesBtn" type="button">نعم 🤍</button>
-        <button class="btn no" id="noBtn" type="button">لا 🙈</button>
-      </div>
-    </div>
+  <section id="home">
+    <div class="bears">🧸💙🧸</div>
+    <h1>تحدّي الصداقة</h1>
+    <p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
+    <button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
+    <button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
   </section>
-  <section class="result" id="result">
-    <div class="big-bear">🧸💙🧸</div>
-    <h2>يا سلام! 🎉</h2>
-    <p id="resultText">الصداقة تزيد الدنيا جمالًا!</p>
-    <button class="again" id="againBtn" type="button">العودة ↩</button>
+
+  <section id="creator" class="hidden">
+    <div class="bears">📝✨</div>
+    <h1>حضّر التحدّي</h1>
+    <p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
+    <div class="counter" id="questionCount">عدد الأسئلة: 0</div>
+    <label class="label" for="questionInput">السؤال</label>
+    <textarea id="questionInput" maxlength="250" placeholder="مثلاً: ما لون السماء؟"></textarea>
+    <label class="label" for="answerInput">الإجابة الصحيحة</label>
+    <input id="answerInput" maxlength="100" placeholder="اكتب الإجابة الصحيحة">
+    <button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
+    <div id="creatorMessage"></div>
+    <button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
+    <button class="btn secondary" id="homeBtn">الرئيسية</button>
+  </section>
+
+  <section id="playing" class="hidden">
+    <div class="bears">🤔💭</div>
+    <h1>جاوب بصراحة!</h1>
+    <div class="counter" id="progress"></div>
+    <div class="question-box" id="questionText"></div>
+    <label class="label" for="userAnswer">إجابتك</label>
+    <input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
+    <button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
+    <div id="feedback" class="notice hidden"></div>
+    <button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
+    <button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
+  </section>
+
+  <section id="finished" class="hidden">
+    <div class="bears">🏆🧸🎉</div>
+    <h1>انتهى التحدّي!</h1>
+    <p class="desc" id="finalText"></p>
+    <button class="btn primary" id="replayBtn">إعادة التحدّي ↻</button>
+    <button class="btn secondary" id="finishHome">الرئيسية</button>
   </section>
 </main>
-<div class="nova-brand">Nova <span>©</span></div>
+
+<div class="brand">Nova <span>©</span></div>
+
 <script>
-const namePanel=document.getElementById("namePanel");
-const nameInput=document.getElementById("nameInput");
-const personName=document.getElementById("personName");
-const changeName=document.getElementById("changeName");
-const saveName=document.getElementById("saveName");
-const noBtn=document.getElementById("noBtn");
-const yesBtn=document.getElementById("yesBtn");
-const buttonsArea=document.getElementById("buttonsArea");
-const question=document.getElementById("question");
-const result=document.getElementById("result");
-const resultText=document.getElementById("resultText");
-const againBtn=document.getElementById("againBtn");
-let currentName="نوري",noMoves=0;
+const $=id=>document.getElementById(id);
+const sections=["home","creator","playing","finished"];
+let questions=[],index=0,score=0,answered=false,currentName="صديقي";
 
-changeName.addEventListener("click",()=>{
-  nameInput.value=currentName;
-  namePanel.classList.toggle("open");
-  if(namePanel.classList.contains("open"))setTimeout(()=>nameInput.focus(),200);
-});
-saveName.addEventListener("click",()=>{
-  const newName=nameInput.value.trim();
-  if(newName){currentName=newName;personName.textContent=currentName;}
-  namePanel.classList.remove("open");
-});
-nameInput.addEventListener("keydown",e=>{if(e.key==="Enter")saveName.click();});
-document.addEventListener("click",event=>{
-  if(!namePanel.contains(event.target)&&!changeName.contains(event.target))namePanel.classList.remove("open");
+function show(id){
+  sections.forEach(s=>$(s).classList.toggle("hidden",s!==id));
+  $("namePanel").classList.remove("open");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("changeName").onclick=()=>{
+  $("nameInput").value=currentName;
+  $("namePanel").classList.toggle("open");
+};
+$("saveName").onclick=()=>{
+  currentName=$("nameInput").value.trim()||"صديقي";
+  $("namePanel").classList.remove("open");
+};
+document.addEventListener("click",e=>{
+  if(!$("namePanel").contains(e.target)&&e.target!==$("changeName"))
+    $("namePanel").classList.remove("open");
 });
 
-function moveNoButton(){
-  const area=buttonsArea,button=noBtn;
-  if(!button.classList.contains("running")){
-    const b=button.getBoundingClientRect(),a=area.getBoundingClientRect();
-    button.classList.add("running");
-    button.style.left=(b.left-a.left)+"px";
-    button.style.top=(b.top-a.top)+"px";
+function updateCount(){
+  $("questionCount").textContent="عدد الأسئلة: "+questions.length;
+}
+function resetForm(){
+  $("questionInput").value="";
+  $("answerInput").value="";
+  $("creatorMessage").textContent="";
+}
+$("createBtn").onclick=()=>{
+  questions=[];updateCount();resetForm();show("creator");
+};
+$("homeBtn").onclick=()=>show("home");
+
+$("addBtn").onclick=()=>{
+  const q=$("questionInput").value.trim();
+  const a=$("answerInput").value.trim();
+  if(!q||!a){
+    $("creatorMessage").textContent="⚠️ اكتب السؤال والإجابة أولاً!";
+    return;
   }
-  const maxX=Math.max(0,area.clientWidth-button.offsetWidth);
-  const maxY=Math.max(0,area.clientHeight-button.offsetHeight);
-  const oldX=parseFloat(button.style.left)||0;
-  const oldY=parseFloat(button.style.top)||0;
-  let x=oldX,y=oldY,tries=0;
-  do{
-    x=Math.random()*maxX;
-    y=Math.random()*maxY;
-    tries++;
-  }while(tries<12&&Math.abs(x-oldX)<35&&Math.abs(y-oldY)<15);
-  button.style.left=x+"px";
-  button.style.top=y+"px";
-  button.style.transform="rotate("+(Math.random()*12-6)+"deg) scale(.96)";
-  noMoves++;
-  const messages=["متأكد؟ 🥺","فكّر مرة ثانية! 🙈","ما تلحقنيش 😂","امسكني إذا تقدر! 🏃","جرّب زر نعم 🤍"];
-  button.textContent=messages[Math.min(noMoves-1,messages.length-1)];
+  questions.push({q,a});
+  updateCount();
+  resetForm();
+  $("creatorMessage").textContent="✅ تمت إضافة السؤال بنجاح!";
+};
+function encodeQuiz(data){
+  const bytes=new TextEncoder().encode(JSON.stringify(data));
+  let binary="";
+  bytes.forEach(b=>binary+=String.fromCharCode(b));
+  return btoa(binary);
 }
-noBtn.addEventListener("pointerenter",moveNoButton);
-noBtn.addEventListener("click",event=>{event.preventDefault();moveNoButton();});
-noBtn.addEventListener("touchstart",event=>{event.preventDefault();moveNoButton();},{passive:false});
+function decodeQuiz(encoded){
+  const binary=atob(encoded);
+  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+$("shareBtn").onclick=async()=>{
+  if(!questions.length){
+    $("creatorMessage").textContent="⚠️ أضف سؤالاً واحداً على الأقل!";
+    return;
+  }
+  const url=new URL(location.href);
+  url.hash="quiz="+encodeQuiz(questions);
+  try{
+    await navigator.clipboard.writeText(url.href);
+    $("creatorMessage").textContent="✅ رابط التحدّي نُسخ! ابعثه لصاحبك.";
+  }catch(e){
+    $("creatorMessage").innerHTML="";
+    const link=document.createElement("textarea");
+    link.readOnly=true;
+    link.value=url.href;
+    $("creatorMessage").appendChild(link);
+    link.select();
+    $("creatorMessage").append("انسخ الرابط أعلاه وابعثه لصاحبك 🔗");
+  }
+};
+function startQuiz(){
+  if(!questions.length){
+    $("creatorMessage").textContent="أضف أسئلة أولاً!";
+    show("creator");
+    return;
+  }
+  index=0;score=0;answered=false;
+  show("playing");renderQuestion();
+}
+function renderQuestion(){
+  answered=false;
+  $("progress").textContent="السؤال "+(index+1)+" من "+questions.length;
+  $("questionText").textContent=questions[index].q;
+  $("userAnswer").value="";
+  $("userAnswer").disabled=false;
+  $("feedback").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+  $("submitBtn").classList.remove("hidden");
+  $("userAnswer").focus();
+}
+function normalize(s){
+  return s.trim().toLocaleLowerCase()
+    .replace(/[أإآ]/g,"ا").replace(/ى/g,"ي")
+    .replace(/\s+/g," ");
+}
+$("submitBtn").onclick=()=>{
+  if(answered)return;
+  const answer=$("userAnswer").value.trim();
+  if(!answer){
+    $("feedback").textContent="اكتب إجابتك أولاً 😄";
+    $("feedback").classList.remove("hidden");
+    return;
+  }
+  answered=true;
+  const correct=normalize(answer)===normalize(questions[index].a);
+  const feedback=$("feedback");
+  feedback.classList.remove("hidden");
+  $("userAnswer").disabled=true;
+  $("submitBtn").classList.add("hidden");
 
-yesBtn.addEventListener("click",()=>{
-  question.style.display="none";
-  result.style.display="block";
-  resultText.textContent="الصداقة مع "+currentName+" تزيد الدنيا جمالًا! 🤍";
-  namePanel.classList.remove("open");
+  // عكس النتيجة عمداً: الصحيحة تُحسب خطأ والعكس
+  if(correct){
+    feedback.innerHTML="😂❌ الموقع يقول: إجابة خاطئة!<br>لكن في الحقيقة إجابتك صحيحة!";
+  }else{
+    score++;
+    feedback.innerHTML="🎉✅ الموقع يقول: إجابة صحيحة!<br>لكن في الحقيقة إجابتك خاطئة!<br><small>الإجابة الصحيحة: "+escapeHTML(questions[index].a)+"</small>";
+  }
+  $("nextBtn").classList.remove("hidden");
   createBears();
-});
-function resetPage(){
-  result.style.display="none";question.style.display="block";noMoves=0;
-  noBtn.textContent="لا 🙈";noBtn.classList.remove("running");
-  noBtn.style.left="";noBtn.style.top="";noBtn.style.transform="";
+};
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-againBtn.addEventListener("click",resetPage);
+$("nextBtn").onclick=()=>{
+  index++;
+  if(index>=questions.length){
+    $("finalText").textContent="يا "+currentName+"! عدد الإجابات الخاطئة التي حسبها الموقع صحيحة هو "+score+" من "+questions.length+" 😂💙";
+    show("finished");
+    createBears();
+  }else renderQuestion();
+};
+$("exitBtn").onclick=()=>show("home");
+$("replayBtn").onclick=startQuiz;
+$("finishHome").onclick=()=>show("home");
+$("playBtn").onclick=()=>{
+  const data=location.hash.match(/^#quiz=(.+)$/);
+  if(data){
+    try{
+      const parsed=decodeQuiz(data[1]);
+      if(Array.isArray(parsed)&&parsed.length&&parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
+        questions=parsed;
+        startQuiz();
+        return;
+      }
+    }catch(e){}
+  }
+  $("creatorMessage").textContent="افتح رابط التحدّي الذي أرسله لك صديقك، أو أنشئ أسئلة جديدة.";
+  questions=[];updateCount();show("creator");
+};
 function createBears(){
   const emojis=["🧸","🤍","💙","🐻"];
-  for(let i=0;i<12;i++)setTimeout(()=>{
-    const bear=document.createElement("div");bear.className="float-bear";
-    bear.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-    bear.style.left=Math.random()*95+"vw";
-    bear.style.fontSize=(20+Math.random()*20)+"px";
-    bear.style.animationDuration=(4+Math.random()*3)+"s";
-    document.body.appendChild(bear);setTimeout(()=>bear.remove(),7500);
-  },i*180);
+  for(let i=0;i<9;i++){
+    setTimeout(()=>{
+      const b=document.createElement("div");
+      b.className="float-bear";
+      b.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      b.style.left=Math.random()*95+"vw";
+      b.style.fontSize=(20+Math.random()*22)+"px";
+      b.style.animationDuration=(4+Math.random()*3)+"s";
+      document.body.appendChild(b);
+      setTimeout(()=>b.remove(),7500);
+    },i*150);
+  }
+}
+const incoming=location.hash.match(/^#quiz=(.+)$/);
+if(incoming){
+  try{
+    const parsed=decodeQuiz(incoming[1]);
+    if(Array.isArray(parsed)&&parsed.length&&parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
+      questions=parsed;
+      startQuiz();
+    }
+  }catch(e){}
 }
 </script>
 </body>
