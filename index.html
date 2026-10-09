@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172554">
+<title>Friendship | Nova</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;color:#fff;background:linear-gradient(135deg,#101d46,#3730a3,#2563eb)}
+.glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;animation:glowMove 8s infinite alternate ease-in-out}
+.glow.one{background:#60a5fa;top:-70px;right:-60px}.glow.two{background:#a78bfa;bottom:-80px;left:-60px;animation-delay:-4s}
+@keyframes glowMove{to{transform:translate(35px,35px) scale(1.2)}}
+.change-name{position:fixed;top:18px;right:16px;z-index:20;padding:11px 15px;border:1px solid #ffffff40;border-radius:14px;color:#fff;background:#ffffff18;backdrop-filter:blur(12px);font-size:13px;cursor:pointer;transition:.25s}
+.change-name:hover{background:#ffffff30;transform:translateY(-2px)}
+.name-panel{position:fixed;top:70px;right:16px;width:min(290px,calc(100vw - 32px));padding:18px;border:1px solid #ffffff35;border-radius:20px;background:#172554ee;backdrop-filter:blur(18px);box-shadow:0 15px 40px #0004;z-index:30;opacity:0;visibility:hidden;transform:translateY(-12px) scale(.95);transition:.3s ease}
+.name-panel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.name-panel h3{margin-bottom:12px;font-size:16px}
+.name-panel input{width:100%;padding:12px;border:1px solid #ffffff40;border-radius:12px;outline:none;color:white;background:#ffffff12;font-size:15px;margin-bottom:10px}
+.name-panel input::placeholder{color:#cbd5e1}
+.save-name{width:100%;padding:11px;border:0;border-radius:12px;color:#172554;background:#bfdbfe;font-weight:bold;cursor:pointer}
+.card{position:relative;z-index:2;width:min(420px,91vw);padding:34px 22px;text-align:center;border:1px solid #ffffff35;border-radius:28px;background:#ffffff13;backdrop-filter:blur(20px);box-shadow:0 20px 70px #0003;animation:cardEnter .8s ease both}
+@keyframes cardEnter{from{opacity:0;transform:translateY(25px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.bears{font-size:55px;margin-bottom:15px;animation:bearFloat 3s infinite ease-in-out}
+@keyframes bearFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+h1{font-size:clamp(24px,6vw,32px);margin-bottom:13px;line-height:1.5}
+.description{color:#e0e7ff;font-size:15px;line-height:1.9;margin-bottom:25px}
+.buttons-area{position:relative;width:100%;height:60px;overflow:visible;display:flex;align-items:center;justify-content:center}
+.buttons{display:flex;justify-content:center;align-items:center;gap:12px;width:100%;height:60px}
+.btn{min-width:105px;padding:13px 20px;border:0;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;transition:transform .2s,background .2s;touch-action:manipulation}
+.btn:active{transform:scale(.95)}
+.yes{color:#172554;background:#bfdbfe;box-shadow:0 5px 18px #60a5fa35}.yes:hover{background:#dbeafe}
+.no{color:#fff;background:#ffffff20;border:1px solid #ffffff50}
+.no.running{position:absolute;margin:0;z-index:5;will-change:left,top,transform;transition:left .24s cubic-bezier(.2,.8,.2,1),top .24s cubic-bezier(.2,.8,.2,1),transform .18s ease}
+.result{display:none;animation:cardEnter .5s ease both}
+.result .big-bear{font-size:65px;margin-bottom:12px}
+.result h2{margin-bottom:12px;font-size:25px}
+.result p{line-height:1.9;color:#e0e7ff}
+.again{margin-top:20px;padding:11px 20px;border:1px solid #ffffff45;border-radius:12px;color:white;background:#ffffff18;cursor:pointer}
+.nova-brand{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;backdrop-filter:blur(12px);box-shadow:0 4px 20px #0002;color:white;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
+.nova-brand span{color:#93c5fd}
+.float-bear{position:fixed;bottom:-40px;z-index:1;pointer-events:none;animation:bearRise 6s linear forwards;opacity:.7}
+@keyframes bearRise{0%{transform:translateY(0) rotate(-10deg);opacity:0}15%{opacity:.7}100%{transform:translateY(-110vh) rotate(15deg);opacity:0}}
+@media(max-width:360px){.card{padding:28px 15px}.btn{min-width:95px;padding:12px 15px}.buttons{gap:9px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="glow one"></div><div class="glow two"></div>
+<button class="change-name" id="changeName" type="button">✏️ تغيير الاسم</button>
+<div class="name-panel" id="namePanel">
+  <h3>✨ غيّر الاسم</h3>
+  <input id="nameInput" type="text" maxlength="30" placeholder="اكتب الاسم هنا...">
+  <button class="save-name" id="saveName" type="button">حفظ الاسم ✓</button>
+</div>
+<main class="card">
+  <section id="question">
+    <div class="bears">🧸🤍🧸</div>
+    <h1>هل تحب <span id="personName">نوري</span>؟</h1>
+    <p class="description">الصداقة الحقيقية كنز جميل ✨<br>خلّينا نشوف جوابك!</p>
+    <div class="buttons-area" id="buttonsArea">
+      <div class="buttons" id="buttons">
+        <button class="btn yes" id="yesBtn" type="button">نعم 🤍</button>
+        <button class="btn no" id="noBtn" type="button">لا 🙈</button>
+      </div>
+    </div>
+  </section>
+  <section class="result" id="result">
+    <div class="big-bear">🧸💙🧸</div>
+    <h2>يا سلام! 🎉</h2>
+    <p id="resultText">الصداقة تزيد الدنيا جمالًا!</p>
+    <button class="again" id="againBtn" type="button">العودة ↩</button>
+  </section>
+</main>
+<div class="nova-brand">Nova <span>©</span></div>
+<script>
+const namePanel=document.getElementById("namePanel");
+const nameInput=document.getElementById("nameInput");
+const personName=document.getElementById("personName");
+const changeName=document.getElementById("changeName");
+const saveName=document.getElementById("saveName");
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const buttonsArea=document.getElementById("buttonsArea");
+const question=document.getElementById("question");
+const result=document.getElementById("result");
+const resultText=document.getElementById("resultText");
+const againBtn=document.getElementById("againBtn");
+let currentName="نوري",noMoves=0;
+
+changeName.addEventListener("click",()=>{
+  nameInput.value=currentName;
+  namePanel.classList.toggle("open");
+  if(namePanel.classList.contains("open"))setTimeout(()=>nameInput.focus(),200);
+});
+saveName.addEventListener("click",()=>{
+  const newName=nameInput.value.trim();
+  if(newName){currentName=newName;personName.textContent=currentName;}
+  namePanel.classList.remove("open");
+});
+nameInput.addEventListener("keydown",e=>{if(e.key==="Enter")saveName.click();});
+document.addEventListener("click",event=>{
+  if(!namePanel.contains(event.target)&&!changeName.contains(event.target))namePanel.classList.remove("open");
+});
+
+function moveNoButton(){
+  const area=buttonsArea,button=noBtn;
+  if(!button.classList.contains("running")){
+    const b=button.getBoundingClientRect(),a=area.getBoundingClientRect();
+    button.classList.add("running");
+    button.style.left=(b.left-a.left)+"px";
+    button.style.top=(b.top-a.top)+"px";
+  }
+  const maxX=Math.max(0,area.clientWidth-button.offsetWidth);
+  const maxY=Math.max(0,area.clientHeight-button.offsetHeight);
+  const oldX=parseFloat(button.style.left)||0;
+  const oldY=parseFloat(button.style.top)||0;
+  let x=oldX,y=oldY,tries=0;
+  do{
+    x=Math.random()*maxX;
+    y=Math.random()*maxY;
+    tries++;
+  }while(tries<12&&Math.abs(x-oldX)<35&&Math.abs(y-oldY)<15);
+  button.style.left=x+"px";
+  button.style.top=y+"px";
+  button.style.transform="rotate("+(Math.random()*12-6)+"deg) scale(.96)";
+  noMoves++;
+  const messages=["متأكد؟ 🥺","فكّر مرة ثانية! 🙈","ما تلحقنيش 😂","امسكني إذا تقدر! 🏃","جرّب زر نعم 🤍"];
+  button.textContent=messages[Math.min(noMoves-1,messages.length-1)];
+}
+noBtn.addEventListener("pointerenter",moveNoButton);
+noBtn.addEventListener("click",event=>{event.preventDefault();moveNoButton();});
+noBtn.addEventListener("touchstart",event=>{event.preventDefault();moveNoButton();},{passive:false});
+
+yesBtn.addEventListener("click",()=>{
+  question.style.display="none";
+  result.style.display="block";
+  resultText.textContent="الصداقة مع "+currentName+" تزيد الدنيا جمالًا! 🤍";
+  namePanel.classList.remove("open");
+  createBears();
+});
+function resetPage(){
+  result.style.display="none";question.style.display="block";noMoves=0;
+  noBtn.textContent="لا 🙈";noBtn.classList.remove("running");
+  noBtn.style.left="";noBtn.style.top="";noBtn.style.transform="";
+}
+againBtn.addEventListener("click",resetPage);
+function createBears(){
+  const emojis=["🧸","🤍","💙","🐻"];
+  for(let i=0;i<12;i++)setTimeout(()=>{
+    const bear=document.createElement("div");bear.className="float-bear";
+    bear.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    bear.style.left=Math.random()*95+"vw";
+    bear.style.fontSize=(20+Math.random()*20)+"px";
+    bear.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(bear);setTimeout(()=>bear.remove(),7500);
+  },i*180);
+}
+</script>
+</body>
+</html>
