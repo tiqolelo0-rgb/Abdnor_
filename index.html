@@ -6,100 +6,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#172554">
 <title>Nova | Friendship Quiz</title>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;min-height:100dvh;overflow-x:hidden;font-family:Arial,sans-serif;color:white;background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);display:flex;align-items:center;justify-content:center;padding:75px 0 65px}
-.glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;animation:glowMove 8s infinite alternate ease-in-out}
+body{
+  min-height:100vh;min-height:100dvh;overflow-x:hidden;
+  font-family:Arial,sans-serif;color:#fff;
+  background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);
+  display:flex;align-items:center;justify-content:center;
+  padding:75px 0 65px
+}
+.glow{
+  position:fixed;width:260px;height:260px;border-radius:50%;
+  filter:blur(80px);opacity:.45;pointer-events:none;
+  animation:glowMove 8s infinite alternate ease-in-out
+}
 .one{background:#60a5fa;top:-70px;right:-60px}
 .two{background:#a78bfa;bottom:-80px;left:-60px;animation-delay:-4s}
 @keyframes glowMove{to{transform:translate(35px,35px) scale(1.2)}}
+
 button{font-family:inherit;cursor:pointer;touch-action:manipulation}
-.change-name{position:fixed;top:16px;right:14px;z-index:20;padding:10px 13px;border:1px solid #ffffff40;border-radius:13px;color:white;background:#ffffff18}
-.name-panel{position:fixed;top:65px;right:14px;width:min(290px,calc(100vw - 28px));padding:17px;border:1px solid #ffffff35;border-radius:20px;background:#172554f5;z-index:30;display:none}
+.change-name{
+  position:fixed;top:16px;right:14px;z-index:20;
+  padding:10px 13px;border:1px solid #ffffff40;
+  border-radius:13px;color:#fff;background:#ffffff18
+}
+.name-panel{
+  position:fixed;top:65px;right:14px;
+  width:min(290px,calc(100vw - 28px));padding:17px;
+  border:1px solid #ffffff35;border-radius:20px;
+  background:#172554f5;z-index:30;display:none;
+  box-shadow:0 15px 40px #0004
+}
 .name-panel.open{display:block;animation:enter .3s ease}
 .name-panel h3{margin-bottom:12px}
-input,textarea{width:100%;padding:12px;margin-top:7px;margin-bottom:12px;border:1px solid #ffffff40;border-radius:12px;color:white;background:#ffffff12;outline:none;font-size:15px;font-family:inherit}
+
+input,textarea{
+  width:100%;padding:12px;margin-top:7px;margin-bottom:12px;
+  border:1px solid #ffffff40;border-radius:12px;
+  color:#fff;background:#ffffff12;outline:none;
+  font-size:15px;font-family:inherit
+}
 input::placeholder,textarea::placeholder{color:#cbd5e1}
 textarea{resize:vertical;min-height:75px}
-.card{position:relative;z-index:2;width:min(440px,92vw);padding:27px 21px;text-align:center;border:1px solid #ffffff35;border-radius:27px;background:#ffffff13;backdrop-filter:blur(20px);box-shadow:0 20px 70px #0003;animation:enter .7s ease}
-@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.card{
+  position:relative;z-index:2;width:min(440px,92vw);
+  padding:27px 21px;text-align:center;
+  border:1px solid #ffffff35;border-radius:27px;
+  background:#ffffff13;backdrop-filter:blur(20px);
+  box-shadow:0 20px 70px #0003;animation:enter .7s ease
+}
+@keyframes enter{
+  from{opacity:0;transform:translateY(18px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 .bears{font-size:48px;margin-bottom:12px;animation:float 3s infinite ease-in-out}
 @keyframes float{50%{transform:translateY(-7px)}}
 h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
 .desc{font-size:14px;color:#e0e7ff;line-height:1.9;margin-bottom:18px}
-.btn{width:100%;padding:13px 15px;border:0;border-radius:13px;font-size:15px;font-weight:bold;margin-top:8px;transition:transform .2s}
+.btn{
+  width:100%;padding:13px 15px;border:0;border-radius:13px;
+  font-size:15px;font-weight:bold;margin-top:8px;transition:transform .2s
+}
 .btn:active{transform:scale(.97)}
 .primary{color:#172554;background:#bfdbfe}
-.secondary{color:white;background:#ffffff20;border:1px solid #ffffff45}
+.secondary{color:#fff;background:#ffffff20;border:1px solid #ffffff45}
 .hidden{display:none!important}
 .label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:5px}
 .counter{font-size:12px;color:#bfdbfe;margin:10px 0}
-.question-box{padding:17px 13px;border:1px solid #ffffff30;border-radius:16px;background:#ffffff10;font-size:19px;font-weight:bold;line-height:1.8;margin:18px 0}
-.notice{margin-top:13px;padding:14px;border-radius:15px;background:#ffffff13;line-height:1.8;animation:enter .35s ease}
-.brand{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;color:white;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
+.question-box{
+  padding:17px 13px;border:1px solid #ffffff30;
+  border-radius:16px;background:#ffffff10;
+  font-size:19px;font-weight:bold;line-height:1.8;margin:18px 0
+}
+.notice{
+  margin-top:13px;padding:14px;border-radius:15px;
+  background:#ffffff13;line-height:1.8;animation:enter .35s ease
+}
+.brand{
+  position:fixed;bottom:13px;left:50%;transform:translateX(-50%);
+  padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;
+  background:#ffffff12;color:#fff;font-size:12px;
+  font-weight:bold;letter-spacing:2px;white-space:nowrap
+}
 .brand span{color:#93c5fd}
-.float-bear{position:fixed;bottom:-40px;z-index:5;pointer-events:none;animation:rise 5s linear forwards}
-@keyframes rise{to{transform:translateY(-110vh) rotate(18deg);opacity:0}}
-@media(max-width:360px){.card{padding:23px 15px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.float-bear{
+  position:fixed;bottom:-40px;z-index:5;pointer-events:none;
+  animation:rise 5s linear forwards
+}
+@keyframes rise{
+  to{transform:translateY(-110vh) rotate(18deg);opacity:0}
+}
+
+/* Professional rating */
+.rating-screen{animation:ratingEnter .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes ratingEnter{
+  0%{opacity:0;transform:scale(.75) translateY(25px);filter:blur(8px)}
+  100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}
+}
+.rating-icon{
+  font-size:58px;margin:5px 0 15px;
+  animation:trophyPulse 1.8s infinite ease-in-out;
+  filter:drop-shadow(0 0 15px #facc15aa)
+}
+@keyframes trophyPulse{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-7px) scale(1.1)}
+}
+.rating-circle{
+  --rating:0%;
+  width:158px;height:158px;margin:20px auto;
+  border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(#facc15 var(--rating),#ffffff18 var(--rating));
+  box-shadow:0 0 30px #60a5fa40;
+  position:relative;animation:circleAppear 1.3s ease both
+}
+.rating-circle::before{
+  content:"";position:absolute;inset:9px;border-radius:50%;
+  background:#172554;border:1px solid #ffffff25
+}
+.rating-number{
+  z-index:1;font-size:37px;font-weight:900;
+  color:#fde68a;text-shadow:0 0 18px #facc1570
+}
+.rating-number small{font-size:15px;color:#dbeafe}
+@keyframes circleAppear{
+  from{transform:rotate(-100deg) scale(.6);opacity:0}
+  to{transform:rotate(0) scale(1);opacity:1}
+}
+.rating-stars{font-size:27px;letter-spacing:3px;margin:12px 0}
+.rating-stars span{
+  display:inline-block;animation:starPop .45s backwards;
+  filter:drop-shadow(0 0 7px #facc1580)
+}
+.rating-stars span:nth-child(2){animation-delay:.12s}
+.rating-stars span:nth-child(3){animation-delay:.24s}
+.rating-stars span:nth-child(4){animation-delay:.36s}
+.rating-stars span:nth-child(5){animation-delay:.48s}
+@keyframes starPop{
+  from{transform:scale(0) rotate(-45deg);opacity:0}
+  to{transform:scale(1) rotate(0);opacity:1}
+}
+.rating-message{
+  padding:17px 12px;margin:15px 0;
+  border:1px solid #ffffff30;border-radius:18px;
+  background:linear-gradient(135deg,#ffffff15,#60a5fa12);
+  line-height:2;animation:enter .8s .2s both
+}
+.rating-message strong{color:#fde68a;font-size:19px}
+.confetti{
+  position:fixed;top:-25px;z-index:100;pointer-events:none;
+  animation:confettiFall linear forwards
+}
+@keyframes confettiFall{
+  to{transform:translateY(110vh) rotate(800deg);opacity:0}
+}
+@media(max-width:360px){
+  .card{padding:23px 15px}
+  .rating-circle{width:140px;height:140px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
+
 <body>
 <div class="glow one"></div>
 <div class="glow two"></div>
 
 <button class="change-name" id="changeName">✏️ تغيير الاسم</button>
+
 <div class="name-panel" id="namePanel">
-<h3>✨ اسم الصديق</h3>
-<input id="nameInput" maxlength="30" placeholder="اكتب الاسم...">
-<button class="btn primary" id="saveName">حفظ الاسم ✓</button>
+  <h3>✨ اسم الصديق</h3>
+  <input id="nameInput" maxlength="30" placeholder="اكتب الاسم...">
+  <button class="btn primary" id="saveName">حفظ الاسم ✓</button>
 </div>
 
 <main class="card">
+
 <section id="home">
-<div class="bears">🧸💙🧸</div>
-<h1>تحدّي الصداقة</h1>
-<p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
-<button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
-<button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
+  <div class="bears">🧸💙🧸</div>
+  <h1>تحدّي الصداقة</h1>
+  <p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
+  <button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
+  <button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
 </section>
 
 <section id="creator" class="hidden">
-<div class="bears">📝✨</div>
-<h1>حضّر التحدّي</h1>
-<p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
-<div class="counter" id="questionCount">عدد الأسئلة: 0</div>
-<label class="label" for="questionInput">السؤال</label>
-<textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك..."></textarea>
-<label class="label" for="answerInput">الإجابة الصحيحة</label>
-<input id="answerInput" maxlength="100" placeholder="الإجابة الصحيحة">
-<button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
-<div id="creatorMessage"></div>
-<button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
-<button class="btn secondary" id="homeBtn">الرئيسية</button>
+  <div class="bears">📝✨</div>
+  <h1>حضّر التحدّي</h1>
+  <p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
+  <div class="counter" id="questionCount">عدد الأسئلة: 0</div>
+  <label class="label" for="questionInput">السؤال</label>
+  <textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك..."></textarea>
+  <label class="label" for="answerInput">الإجابة الصحيحة</label>
+  <input id="answerInput" maxlength="100" placeholder="الإجابة الصحيحة">
+  <button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
+  <div id="creatorMessage"></div>
+  <button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
+  <button class="btn secondary" id="homeBtn">🏠 الرئيسية</button>
 </section>
 
 <section id="playing" class="hidden">
-<div class="bears">🤔💭</div>
-<h1>جاوب بصراحة!</h1>
-<div class="counter" id="progress"></div>
-<div class="question-box" id="questionText"></div>
-<label class="label" for="userAnswer">إجابتك</label>
-<input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
-<button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
-<div id="feedback" class="notice hidden"></div>
-<button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
-<button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
+  <div class="bears">🤔💭</div>
+  <h1>جاوب بصراحة!</h1>
+  <div class="counter" id="progress"></div>
+  <div class="question-box" id="questionText"></div>
+  <label class="label" for="userAnswer">إجابتك</label>
+  <input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
+  <button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
+  <div id="feedback" class="notice hidden"></div>
+  <button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
+  <button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
 </section>
 
-<section id="finished" class="hidden">
-<div class="bears">🏆🧸🎉</div>
-<h1>انتهى التحدّي!</h1>
-<div id="ratingStars" style="font-size:25px;margin:12px 0">⭐⭐⭐⭐⭐</div>
-<p class="desc" id="finalText"></p>
-<button class="btn primary" id="replayBtn">إعادة التحدّي ↻</button>
-<button class="btn secondary" id="finishHome">الرئيسية</button>
+<section id="finished" class="hidden rating-screen">
+  <div class="rating-icon" id="ratingIcon">🏆</div>
+  <h1 id="ratingTitle">انتهى التحدّي!</h1>
+  <p class="desc">نتيجة تحدّي الصداقة من Nova ✨</p>
+
+  <div class="rating-circle" id="ratingCircle">
+    <div class="rating-number">
+      <span id="ratingValue">0</span><small>/10</small>
+    </div>
+  </div>
+
+  <div class="rating-stars" id="ratingStars">
+    <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
+  </div>
+
+  <div class="rating-message" id="finalText"></div>
+
+  <button class="btn primary" id="replayBtn">🔄 إعادة التحدّي</button>
+  <button class="btn secondary" id="finishHome">🏠 الرئيسية</button>
 </section>
+
 </main>
 
 <div class="brand">Nova <span>©</span></div>
@@ -123,9 +266,11 @@ $("saveName").onclick=()=>{
   currentName=$("nameInput").value.trim()||"صديقي";
   $("namePanel").classList.remove("open");
 };
+
 document.addEventListener("click",e=>{
-  if(!$("namePanel").contains(e.target)&&e.target!==$("changeName"))
+  if(!$("namePanel").contains(e.target)&&e.target!==$("changeName")){
     $("namePanel").classList.remove("open");
+  }
 });
 
 function updateCount(){
@@ -148,10 +293,12 @@ $("homeBtn").onclick=()=>show("home");
 $("addBtn").onclick=()=>{
   const q=$("questionInput").value.trim();
   const a=$("answerInput").value.trim();
+
   if(!q||!a){
     $("creatorMessage").textContent="⚠️ اكتب السؤال والإجابة أولاً!";
     return;
   }
+
   questions.push({q,a});
   updateCount();
   resetForm();
@@ -164,6 +311,7 @@ function encodeQuiz(data){
   bytes.forEach(b=>binary+=String.fromCharCode(b));
   return btoa(binary);
 }
+
 function decodeQuiz(encoded){
   const binary=atob(encoded);
   const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
@@ -175,8 +323,10 @@ $("shareBtn").onclick=async()=>{
     $("creatorMessage").textContent="⚠️ أضف سؤالاً واحداً على الأقل!";
     return;
   }
+
   const url=new URL(location.href);
   url.hash="quiz="+encodeQuiz(questions);
+
   try{
     await navigator.clipboard.writeText(url.href);
     $("creatorMessage").textContent="✅ تم نسخ رابط التحدّي! ابعثه لصاحبك.";
@@ -186,6 +336,7 @@ $("shareBtn").onclick=async()=>{
     link.readOnly=true;
     link.value=url.href;
     $("creatorMessage").appendChild(link);
+
     const note=document.createElement("p");
     note.textContent="انسخ الرابط أعلاه وابعثه لصاحبك 🔗";
     $("creatorMessage").appendChild(note);
@@ -226,7 +377,9 @@ function normalize(s){
 
 $("submitBtn").onclick=()=>{
   if(answered)return;
+
   const answer=$("userAnswer").value.trim();
+
   if(!answer){
     $("feedback").textContent="اكتب إجابتك أولاً 😄";
     $("feedback").classList.remove("hidden");
@@ -236,11 +389,12 @@ $("submitBtn").onclick=()=>{
   answered=true;
   const correct=normalize(answer)===normalize(questions[index].a);
   const feedback=$("feedback");
+
   feedback.classList.remove("hidden");
   $("userAnswer").disabled=true;
   $("submitBtn").classList.add("hidden");
 
-  // خدعة: نقلب النتيجة المعروضة للّاعب
+  // خدعة: عكس النتيجة المعروضة للمشارك
   if(correct){
     feedback.textContent="الإجابة غلط يا هطف😂";
   }else{
@@ -254,17 +408,42 @@ $("submitBtn").onclick=()=>{
 
 $("nextBtn").onclick=()=>{
   index++;
+
   if(index>=questions.length){
-    // التقييم مبني على الإجابات التي اعتبرتها اللعبة صحيحة
     const rating=Math.round((score/questions.length)*10);
-    $("ratingStars").textContent="⭐".repeat(Math.max(1,Math.round(rating/2)));
-    $("finalText").textContent=
-      "تقييمك: "+rating+"/10"+
-      (rating<5
-        ? " — لقد فشلت في الاختبار يا فاشل 😂💀"
-        : " — مبروك! نجحت في التحدي يا أسطورة 🏆🔥");
+
+    $("ratingValue").textContent=rating;
+    $("ratingCircle").style.setProperty("--rating",(rating*10)+"%");
+
+    const stars=Math.max(0,Math.min(5,Math.round(rating/2)));
+    $("ratingStars").innerHTML=Array.from(
+      {length:5},
+      (_,i)=>`<span>${i<stars?"⭐":"☆"}</span>`
+    ).join("");
+
+    if(rating<5){
+      $("ratingIcon").textContent="💀";
+      $("ratingTitle").textContent="يا ساتر!";
+      $("finalText").innerHTML=
+        "💔 <strong>لقد فشلت في الاختبار يا فاشل 😂</strong><br>"+
+        "تقييمك ضعيف... لازم تعاود التحدّي! 😈";
+    }else if(rating<8){
+      $("ratingIcon").textContent="🔥";
+      $("ratingTitle").textContent="نتيجة مليحة!";
+      $("finalText").innerHTML=
+        "😎 <strong>راك تتحسّن!</strong><br>"+
+        "باقي شوية وتولي أسطورة في التحدّي 💙";
+    }else{
+      $("ratingIcon").textContent="👑";
+      $("ratingTitle").textContent="أسطورة Nova!";
+      $("finalText").innerHTML=
+        "🏆 <strong>واااو! نتيجة خرافية!</strong><br>"+
+        "أنت ملك التحدّي بلا منازع! 👑✨";
+    }
+
     show("finished");
     createBears();
+    if(rating>=5)createConfetti();
   }else{
     renderQuestion();
   }
@@ -276,25 +455,31 @@ $("finishHome").onclick=()=>show("home");
 
 $("playBtn").onclick=()=>{
   const data=location.hash.match(/^#quiz=(.+)$/);
+
   if(data){
     try{
       const parsed=decodeQuiz(data[1]);
-      if(Array.isArray(parsed)&&parsed.length&&parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
+
+      if(Array.isArray(parsed)&&parsed.length&&
+        parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
         questions=parsed;
         startQuiz();
         return;
       }
     }catch(e){}
   }
+
   questions=[];
   updateCount();
   resetForm();
-  $("creatorMessage").textContent="افتح رابط التحدّي الذي أرسله لك صديقك، أو أنشئ أسئلة جديدة.";
+  $("creatorMessage").textContent=
+    "افتح رابط التحدّي الذي أرسله لك صديقك، أو أنشئ أسئلة جديدة.";
   show("creator");
 };
 
 function createBears(){
   const emojis=["🧸","🤍","💙","🐻"];
+
   for(let i=0;i<9;i++){
     setTimeout(()=>{
       const b=document.createElement("div");
@@ -309,11 +494,31 @@ function createBears(){
   }
 }
 
+function createConfetti(){
+  const colors=["#facc15","#60a5fa","#c084fc","#fb7185","#34d399"];
+
+  for(let i=0;i<65;i++){
+    const piece=document.createElement("div");
+    piece.className="confetti";
+    piece.textContent=Math.random()>.5?"✦":"●";
+    piece.style.left=Math.random()*100+"vw";
+    piece.style.color=colors[Math.floor(Math.random()*colors.length)];
+    piece.style.fontSize=(10+Math.random()*13)+"px";
+    piece.style.animationDuration=(2+Math.random()*3)+"s";
+    piece.style.animationDelay=Math.random()*1.2+"s";
+    document.body.appendChild(piece);
+    setTimeout(()=>piece.remove(),6500);
+  }
+}
+
 const incoming=location.hash.match(/^#quiz=(.+)$/);
+
 if(incoming){
   try{
     const parsed=decodeQuiz(incoming[1]);
-    if(Array.isArray(parsed)&&parsed.length&&parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
+
+    if(Array.isArray(parsed)&&parsed.length&&
+      parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
       questions=parsed;
       startQuiz();
     }
