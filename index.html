@@ -3,527 +3,400 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#172554">
-<title>Nova | Friendship Quiz</title>
-
+<title>Nova | Friendship</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
+:root{--blue:#60a5fa;--purple:#a78bfa;--gold:#facc15}
 body{
-  min-height:100vh;min-height:100dvh;overflow-x:hidden;
-  font-family:Arial,sans-serif;color:#fff;
-  background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);
-  display:flex;align-items:center;justify-content:center;
-  padding:75px 0 65px
+ margin:0;min-height:100vh;min-height:100dvh;
+ font-family:Arial,sans-serif;color:white;
+ background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);
+ padding:76px 0 65px;overflow-x:hidden
 }
-.glow{
-  position:fixed;width:260px;height:260px;border-radius:50%;
-  filter:blur(80px);opacity:.45;pointer-events:none;
-  animation:glowMove 8s infinite alternate ease-in-out
-}
+button{font-family:inherit;cursor:pointer}
+.glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none;animation:glowMove 8s infinite alternate}
 .one{background:#60a5fa;top:-70px;right:-60px}
 .two{background:#a78bfa;bottom:-80px;left:-60px;animation-delay:-4s}
 @keyframes glowMove{to{transform:translate(35px,35px) scale(1.2)}}
-
-button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 .change-name{
-  position:fixed;top:16px;right:14px;z-index:20;
-  padding:10px 13px;border:1px solid #ffffff40;
-  border-radius:13px;color:#fff;background:#ffffff18
+ position:fixed;top:15px;right:14px;z-index:20;
+ padding:10px 13px;border:1px solid #ffffff40;
+ border-radius:13px;color:white;background:#ffffff18
 }
 .name-panel{
-  position:fixed;top:65px;right:14px;
-  width:min(290px,calc(100vw - 28px));padding:17px;
-  border:1px solid #ffffff35;border-radius:20px;
-  background:#172554f5;z-index:30;display:none;
-  box-shadow:0 15px 40px #0004
+ display:none;position:fixed;top:62px;right:14px;z-index:30;
+ width:min(290px,calc(100vw - 28px));padding:17px;
+ border:1px solid #ffffff35;border-radius:20px;
+ background:#172554f5;box-shadow:0 15px 40px #0004
 }
 .name-panel.open{display:block;animation:enter .3s ease}
-.name-panel h3{margin-bottom:12px}
-
-input,textarea{
-  width:100%;padding:12px;margin-top:7px;margin-bottom:12px;
-  border:1px solid #ffffff40;border-radius:12px;
-  color:#fff;background:#ffffff12;outline:none;
-  font-size:15px;font-family:inherit
+input,textarea,select{
+ width:100%;padding:12px;margin:7px 0 12px;
+ border:1px solid #ffffff40;border-radius:12px;
+ color:white;background:#253568;font:inherit;outline:none
 }
-input::placeholder,textarea::placeholder{color:#cbd5e1}
 textarea{resize:vertical;min-height:75px}
-
+input::placeholder,textarea::placeholder{color:#cbd5e1}
+select option{background:#172554;color:white}
+label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:5px}
 .card{
-  position:relative;z-index:2;width:min(440px,92vw);
-  padding:27px 21px;text-align:center;
-  border:1px solid #ffffff35;border-radius:27px;
-  background:#ffffff13;backdrop-filter:blur(20px);
-  box-shadow:0 20px 70px #0003;animation:enter .7s ease
+ position:relative;z-index:2;width:min(460px,92vw);
+ padding:26px 20px;text-align:center;
+ border:1px solid #ffffff35;border-radius:27px;
+ background:#ffffff13;backdrop-filter:blur(20px);
+ box-shadow:0 20px 70px #0003;animation:enter .6s ease
 }
-@keyframes enter{
-  from{opacity:0;transform:translateY(18px) scale(.97)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
+@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .bears{font-size:48px;margin-bottom:12px;animation:float 3s infinite ease-in-out}
 @keyframes float{50%{transform:translateY(-7px)}}
-h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
+h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin:0 0 10px}
 .desc{font-size:14px;color:#e0e7ff;line-height:1.9;margin-bottom:18px}
-.btn{
-  width:100%;padding:13px 15px;border:0;border-radius:13px;
-  font-size:15px;font-weight:bold;margin-top:8px;transition:transform .2s
-}
+.btn{width:100%;padding:13px 15px;border:0;border-radius:13px;font-size:15px;font-weight:bold;margin-top:8px;transition:transform .2s}
 .btn:active{transform:scale(.97)}
 .primary{color:#172554;background:#bfdbfe}
-.secondary{color:#fff;background:#ffffff20;border:1px solid #ffffff45}
+.secondary{color:white;background:#ffffff20;border:1px solid #ffffff45}
 .hidden{display:none!important}
-.label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:5px}
-.counter{font-size:12px;color:#bfdbfe;margin:10px 0}
+.counter{font-size:13px;color:#bfdbfe;margin:10px 0}
+.progress{height:7px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:12px 0 18px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#c4b5fd);transition:width .4s}
 .question-box{
-  padding:17px 13px;border:1px solid #ffffff30;
-  border-radius:16px;background:#ffffff10;
-  font-size:19px;font-weight:bold;line-height:1.8;margin:18px 0
+ padding:18px 13px;border:1px solid #ffffff30;
+ border-radius:18px;background:#ffffff10;
+ font-size:20px;font-weight:bold;line-height:1.8;margin:15px 0
 }
-.notice{
-  margin-top:13px;padding:14px;border-radius:15px;
-  background:#ffffff13;line-height:1.8;animation:enter .35s ease
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.option{
+ min-width:0;padding:10px 8px;min-height:145px;
+ border:2px solid #ffffff35;border-radius:20px;
+ background:#ffffff12;color:white;display:flex;
+ flex-direction:column;justify-content:center;align-items:center;gap:9px;
+ transition:.2s;animation:enter .35s both
 }
-.brand{
-  position:fixed;bottom:13px;left:50%;transform:translateX(-50%);
-  padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;
-  background:#ffffff12;color:#fff;font-size:12px;
-  font-weight:bold;letter-spacing:2px;white-space:nowrap
-}
+.option:hover{transform:translateY(-3px);background:#ffffff20}
+.option .art{font-size:43px}
+.option .label{font-size:14px;line-height:1.6}
+.option.selected{border-color:#60a5fa;background:#60a5fa28}
+.option.correct{border-color:#34d399;background:#34d39922}
+.option.wrong{border-color:#fb7185;background:#fb718522}
+.option:disabled{cursor:default}
+.feedback{margin-top:15px;padding:13px;border-radius:14px;background:#ffffff13;border:1px solid #ffffff30;line-height:1.8}
+.brand{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
 .brand span{color:#93c5fd}
-.float-bear{
-  position:fixed;bottom:-40px;z-index:5;pointer-events:none;
-  animation:rise 5s linear forwards
-}
-@keyframes rise{
-  to{transform:translateY(-110vh) rotate(18deg);opacity:0}
-}
-
-/* Professional rating */
 .rating-screen{animation:ratingEnter .8s cubic-bezier(.2,.8,.2,1) both}
-@keyframes ratingEnter{
-  0%{opacity:0;transform:scale(.75) translateY(25px);filter:blur(8px)}
-  100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}
-}
-.rating-icon{
-  font-size:58px;margin:5px 0 15px;
-  animation:trophyPulse 1.8s infinite ease-in-out;
-  filter:drop-shadow(0 0 15px #facc15aa)
-}
-@keyframes trophyPulse{
-  0%,100%{transform:translateY(0) scale(1)}
-  50%{transform:translateY(-7px) scale(1.1)}
-}
-.rating-circle{
-  --rating:0%;
-  width:158px;height:158px;margin:20px auto;
-  border-radius:50%;display:grid;place-items:center;
-  background:conic-gradient(#facc15 var(--rating),#ffffff18 var(--rating));
-  box-shadow:0 0 30px #60a5fa40;
-  position:relative;animation:circleAppear 1.3s ease both
-}
-.rating-circle::before{
-  content:"";position:absolute;inset:9px;border-radius:50%;
-  background:#172554;border:1px solid #ffffff25
-}
-.rating-number{
-  z-index:1;font-size:37px;font-weight:900;
-  color:#fde68a;text-shadow:0 0 18px #facc1570
-}
+@keyframes ratingEnter{0%{opacity:0;transform:scale(.75) translateY(25px);filter:blur(8px)}100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}
+.rating-icon{font-size:58px;margin:5px 0 15px;animation:trophyPulse 1.8s infinite ease-in-out;filter:drop-shadow(0 0 15px #facc15aa)}
+@keyframes trophyPulse{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.1)}}
+.rating-circle{--rating:0%;width:158px;height:158px;margin:20px auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#facc15 var(--rating),#ffffff18 var(--rating));box-shadow:0 0 30px #60a5fa40;position:relative;animation:circleAppear 1.3s ease both}
+.rating-circle:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#172554;border:1px solid #ffffff25}
+.rating-number{z-index:1;font-size:37px;font-weight:900;color:#fde68a;text-shadow:0 0 18px #facc1570}
 .rating-number small{font-size:15px;color:#dbeafe}
-@keyframes circleAppear{
-  from{transform:rotate(-100deg) scale(.6);opacity:0}
-  to{transform:rotate(0) scale(1);opacity:1}
-}
+@keyframes circleAppear{from{transform:rotate(-100deg) scale(.6);opacity:0}to{transform:rotate(0) scale(1);opacity:1}}
 .rating-stars{font-size:27px;letter-spacing:3px;margin:12px 0}
-.rating-stars span{
-  display:inline-block;animation:starPop .45s backwards;
-  filter:drop-shadow(0 0 7px #facc1580)
-}
-.rating-stars span:nth-child(2){animation-delay:.12s}
-.rating-stars span:nth-child(3){animation-delay:.24s}
-.rating-stars span:nth-child(4){animation-delay:.36s}
-.rating-stars span:nth-child(5){animation-delay:.48s}
-@keyframes starPop{
-  from{transform:scale(0) rotate(-45deg);opacity:0}
-  to{transform:scale(1) rotate(0);opacity:1}
-}
-.rating-message{
-  padding:17px 12px;margin:15px 0;
-  border:1px solid #ffffff30;border-radius:18px;
-  background:linear-gradient(135deg,#ffffff15,#60a5fa12);
-  line-height:2;animation:enter .8s .2s both
-}
-.rating-message strong{color:#fde68a;font-size:19px}
-.confetti{
-  position:fixed;top:-25px;z-index:100;pointer-events:none;
-  animation:confettiFall linear forwards
-}
-@keyframes confettiFall{
-  to{transform:translateY(110vh) rotate(800deg);opacity:0}
-}
-@media(max-width:360px){
-  .card{padding:23px 15px}
-  .rating-circle{width:140px;height:140px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+.rating-stars span{display:inline-block;animation:starPop .45s backwards;filter:drop-shadow(0 0 7px #facc1580)}
+.rating-stars span:nth-child(2){animation-delay:.12s}.rating-stars span:nth-child(3){animation-delay:.24s}.rating-stars span:nth-child(4){animation-delay:.36s}.rating-stars span:nth-child(5){animation-delay:.48s}
+@keyframes starPop{from{transform:scale(0) rotate(-45deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.rating-message{padding:17px 12px;margin:15px 0;border:1px solid #ffffff30;border-radius:18px;background:linear-gradient(135deg,#ffffff15,#60a5fa12);line-height:2}
+.rating-message strong{color:#fde68a;font-size:18px}
+.confetti{position:fixed;top:-25px;z-index:100;pointer-events:none;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(800deg);opacity:0}}
+.small-note{font-size:12px;color:#cbd5e1;line-height:1.7;margin-top:9px}
+@media(max-width:360px){.card{padding:22px 13px}.option{min-height:125px}.option .art{font-size:36px}.rating-circle{width:140px;height:140px}}
 </style>
 </head>
-
 <body>
-<div class="glow one"></div>
-<div class="glow two"></div>
+<div class="glow one"></div><div class="glow two"></div>
 
 <button class="change-name" id="changeName">✏️ تغيير الاسم</button>
-
 <div class="name-panel" id="namePanel">
-  <h3>✨ اسم الصديق</h3>
-  <input id="nameInput" maxlength="30" placeholder="اكتب الاسم...">
-  <button class="btn primary" id="saveName">حفظ الاسم ✓</button>
+ <h3>✨ اسم الصديق</h3>
+ <input id="nameInput" maxlength="30" placeholder="اكتب الاسم...">
+ <button class="btn primary" id="saveName">حفظ الاسم ✓</button>
 </div>
 
 <main class="card">
-
-<section id="home">
+ <section id="home">
   <div class="bears">🧸💙🧸</div>
   <h1>تحدّي الصداقة</h1>
-  <p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
-  <button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
-  <button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
-</section>
+  <p class="desc">اختبروا معرفتكم ببعضكم! 🤔<br>أسئلة جاهزة، أو اصنع تحدّيًا خاصًا بأصدقائك.</p>
+  <button class="btn primary" id="playBtn">🎮 ابدأ الأسئلة الجاهزة</button>
+  <button class="btn secondary" id="editBtn">✏️ تعديل الأسئلة والاختيارات</button>
+  <button class="btn secondary" id="shareBtn">🔗 نسخ رابط التحدّي</button>
+  <p class="small-note">تقدر تعدّل الأسئلة والاختيارات والإجابة الصحيحة، ثم ترسل رابطك لصديقك.</p>
+ </section>
 
-<section id="creator" class="hidden">
+ <section id="editor" class="hidden">
   <div class="bears">📝✨</div>
-  <h1>حضّر التحدّي</h1>
-  <p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
-  <div class="counter" id="questionCount">عدد الأسئلة: 0</div>
-  <label class="label" for="questionInput">السؤال</label>
-  <textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك..."></textarea>
-  <label class="label" for="answerInput">الإجابة الصحيحة</label>
-  <input id="answerInput" maxlength="100" placeholder="الإجابة الصحيحة">
-  <button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
-  <div id="creatorMessage"></div>
-  <button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
-  <button class="btn secondary" id="homeBtn">🏠 الرئيسية</button>
-</section>
+  <h1>تخصيص التحدّي</h1>
+  <p class="desc">عدّل السؤال والاختيارات، وحدّد الإجابة الصحيحة.</p>
+  <label for="questionSelect">اختر سؤالًا لتعديله</label>
+  <select id="questionSelect"></select>
+  <label for="questionInput">نص السؤال</label>
+  <textarea id="questionInput" maxlength="250" placeholder="اكتب السؤال"></textarea>
+  <label>الاختيارات الأربعة</label>
+  <input id="opt0" maxlength="100" placeholder="الاختيار الأول">
+  <input id="opt1" maxlength="100" placeholder="الاختيار الثاني">
+  <input id="opt2" maxlength="100" placeholder="الاختيار الثالث">
+  <input id="opt3" maxlength="100" placeholder="الاختيار الرابع">
+  <label for="correctSelect">الإجابة الصحيحة</label>
+  <select id="correctSelect">
+   <option value="0">الاختيار الأول</option>
+   <option value="1">الاختيار الثاني</option>
+   <option value="2">الاختيار الثالث</option>
+   <option value="3">الاختيار الرابع</option>
+  </select>
+  <button class="btn primary" id="saveQuestion">💾 حفظ التعديلات</button>
+  <button class="btn secondary" id="addQuestion">➕ إضافة سؤال جديد</button>
+  <button class="btn secondary" id="deleteQuestion">🗑️ حذف هذا السؤال</button>
+  <button class="btn secondary" id="resetQuestions">↩️ استعادة الأسئلة الأصلية</button>
+  <button class="btn primary" id="editorPlay">🎮 ابدأ هذا التحدّي</button>
+  <button class="btn secondary" id="editorShare">🔗 إنشاء رابط ومشاركته</button>
+  <button class="btn secondary" id="editorHome">🏠 الرئيسية</button>
+  <div id="editorMessage" class="feedback hidden"></div>
+ </section>
 
-<section id="playing" class="hidden">
+ <section id="playing" class="hidden">
   <div class="bears">🤔💭</div>
-  <h1>جاوب بصراحة!</h1>
-  <div class="counter" id="progress"></div>
+  <h1>تحدّي الصداقة</h1>
+  <div class="counter" id="progress">السؤال 1 من 10</div>
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
   <div class="question-box" id="questionText"></div>
-  <label class="label" for="userAnswer">إجابتك</label>
-  <input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
-  <button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
-  <div id="feedback" class="notice hidden"></div>
-  <button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
-  <button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
-</section>
+  <div class="options" id="options"></div>
+  <div id="feedback" class="feedback hidden"></div>
+  <button class="btn primary hidden" id="nextBtn">السؤال التالي ←</button>
+  <button class="btn secondary" id="exitBtn">🏠 الرئيسية</button>
+ </section>
 
-<section id="finished" class="hidden rating-screen">
+ <section id="finished" class="hidden rating-screen">
   <div class="rating-icon" id="ratingIcon">🏆</div>
   <h1 id="ratingTitle">انتهى التحدّي!</h1>
   <p class="desc">نتيجة تحدّي الصداقة من Nova ✨</p>
-
   <div class="rating-circle" id="ratingCircle">
-    <div class="rating-number">
-      <span id="ratingValue">0</span><small>/10</small>
-    </div>
+   <div class="rating-number"><span id="ratingValue">0</span><small>/10</small></div>
   </div>
-
-  <div class="rating-stars" id="ratingStars">
-    <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
-  </div>
-
+  <div class="rating-stars" id="ratingStars">⭐ ⭐ ⭐ ⭐ ⭐</div>
   <div class="rating-message" id="finalText"></div>
-
+  <p class="desc" id="scoreDetails"></p>
   <button class="btn primary" id="replayBtn">🔄 إعادة التحدّي</button>
   <button class="btn secondary" id="finishHome">🏠 الرئيسية</button>
-</section>
-
+ </section>
 </main>
-
-<div class="brand">Nova <span>©</span></div>
+<div class="brand">Nova <span>✦</span></div>
 
 <script>
 const $=id=>document.getElementById(id);
-const sections=["home","creator","playing","finished"];
-let questions=[],index=0,score=0,answered=false,currentName="صديقي";
+
+const DEFAULT_QUESTIONS=[
+ {q:"على ماذا ينفق نوري معظم ماله؟",opts:[{text:"وجبات خفيفة / طعام 🍔",emoji:"🍟"},{text:"لا شيء — يدّخره 💰",emoji:"🧸"},{text:"الألعاب 🎮",emoji:"🎮"},{text:"الملابس 👕",emoji:"👕"}],correct:0},
+ {q:"ما أكثر شيء يحبه في وقت الفراغ؟",opts:[{text:"الألعاب 🎮",emoji:"🎮"},{text:"النوم 😴",emoji:"🛌"},{text:"الخروج 🌳",emoji:"🌳"},{text:"الأنمي 🍥",emoji:"🍥"}],correct:3},
+ {q:"ما الشيء الذي يفرحه أكثر؟",opts:[{text:"هدية 🎁",emoji:"🎁"},{text:"رسالة صديق 💌",emoji:"💌"},{text:"وجبة لذيذة 🍕",emoji:"🍕"},{text:"الفوز 🏆",emoji:"🏆"}],correct:1},
+ {q:"إذا حصل على المال، ماذا يفعل؟",opts:[{text:"يشتري شيئًا 🛍️",emoji:"🛍️"},{text:"يدّخره 🐷",emoji:"🐷"},{text:"يدعو أصدقاءه 🍔",emoji:"🍔"},{text:"يشحن لعبة 💎",emoji:"💎"}],correct:3},
+ {q:"ما نوع الفيديوهات التي يحبها؟",opts:[{text:"الأنمي ⚔️",emoji:"🍥"},{text:"الألعاب 🎮",emoji:"🎮"},{text:"الضحك 😂",emoji:"🤣"},{text:"كل الأنواع ✨",emoji:"✨"}],correct:0},
+ {q:"كيف يقضي يوم العطلة؟",opts:[{text:"ينام 😴",emoji:"🛌"},{text:"يلعب 🎮",emoji:"🎮"},{text:"يتنزه 🌳",emoji:"🌳"},{text:"يشاهد فيلمًا 🎬",emoji:"🎬"}],correct:1},
+ {q:"أي هدية قد تعجبه أكثر؟",opts:[{text:"سماعات 🎧",emoji:"🎧"},{text:"لعبة 🎮",emoji:"🎮"},{text:"حلوى 🍫",emoji:"🍫"},{text:"هدية من صديق 💝",emoji:"💝"}],correct:3},
+ {q:"ماذا يفعل عندما يشعر بالملل؟",opts:[{text:"يفتح الهاتف 📱",emoji:"📱"},{text:"يلعب 🎮",emoji:"🎮"},{text:"يتحدث مع أصدقائه 💬",emoji:"💬"},{text:"ينام 😴",emoji:"😴"}],correct:0},
+ {q:"أين يفضّل الخروج؟",opts:[{text:"مطعم 🍔",emoji:"🍔"},{text:"حديقة 🌳",emoji:"🌳"},{text:"مركز ألعاب 🕹️",emoji:"🕹️"},{text:"أي مكان مع الأصدقاء 💙",emoji:"👫"}],correct:3},
+ {q:"ما الأهم في الصداقة؟",opts:[{text:"الثقة 🤝",emoji:"🤝"},{text:"الضحك 😂",emoji:"😂"},{text:"المساعدة 💙",emoji:"🫶"},{text:"كل ما سبق 💖",emoji:"💖"}],correct:3}
+];
+
+let questions=structuredClone(DEFAULT_QUESTIONS);
+let index=0,score=0,answered=false,selected=-1,currentName="صديقي";
 
 function show(id){
-  sections.forEach(s=>$(s).classList.toggle("hidden",s!==id));
-  $("namePanel").classList.remove("open");
-  window.scrollTo({top:0,behavior:"smooth"});
+ ["home","editor","playing","finished"].forEach(s=>$(s).classList.toggle("hidden",s!==id));
+ $("namePanel").classList.remove("open");
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 $("changeName").onclick=()=>{
-  $("nameInput").value=currentName;
-  $("namePanel").classList.toggle("open");
+ $("nameInput").value=currentName;
+ $("namePanel").classList.toggle("open");
 };
 $("saveName").onclick=()=>{
-  currentName=$("nameInput").value.trim()||"صديقي";
-  $("namePanel").classList.remove("open");
+ currentName=$("nameInput").value.trim()||"صديقي";
+ $("namePanel").classList.remove("open");
 };
-
 document.addEventListener("click",e=>{
-  if(!$("namePanel").contains(e.target)&&e.target!==$("changeName")){
-    $("namePanel").classList.remove("open");
-  }
+ if(!$("namePanel").contains(e.target)&&e.target!==$("changeName"))$("namePanel").classList.remove("open");
 });
 
-function updateCount(){
-  $("questionCount").textContent="عدد الأسئلة: "+questions.length;
+function encodeData(data){
+ const bytes=new TextEncoder().encode(JSON.stringify(data));
+ let binary="";
+ bytes.forEach(b=>binary+=String.fromCharCode(b));
+ return btoa(binary);
 }
-function resetForm(){
-  $("questionInput").value="";
-  $("answerInput").value="";
-  $("creatorMessage").textContent="";
+function decodeData(str){
+ const binary=atob(str);
+ return JSON.parse(new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0))));
+}
+function validQuestions(qs){
+ return Array.isArray(qs)&&qs.length>0&&qs.length<=50&&qs.every(q=>
+  q&&typeof q.q==="string"&&q.q.trim()&&Array.isArray(q.opts)&&q.opts.length===4&&
+  q.opts.every(o=>o&&typeof o.text==="string"&&o.text.trim())&&
+  Number.isInteger(q.correct)&&q.correct>=0&&q.correct<4
+ );
+}
+function getShareUrl(){
+ const url=new URL(location.href);
+ url.hash="quiz="+encodeData(questions);
+ return url.href;
+}
+async function shareQuiz(){
+ if(!validQuestions(questions))return;
+ const url=getShareUrl();
+ try{
+  await navigator.clipboard.writeText(url);
+  alert("✅ تم نسخ رابط التحدّي! ابعثه لصديقك.");
+ }catch(e){
+  prompt("انسخ رابط التحدّي وابعثه لصديقك:",url);
+ }
 }
 
-$("createBtn").onclick=()=>{
-  questions=[];
-  updateCount();
-  resetForm();
-  show("creator");
+$("shareBtn").onclick=shareQuiz;
+$("editorShare").onclick=shareQuiz;
+$("playBtn").onclick=()=>startQuiz();
+$("editBtn").onclick=()=>{fillSelect();loadEditorQuestion();show("editor")};
+$("editorHome").onclick=()=>show("home");
+$("exitBtn").onclick=()=>show("home");
+$("finishHome").onclick=()=>show("home");
+$("replayBtn").onclick=()=>startQuiz();
+
+function fillSelect(){
+ const s=$("questionSelect");
+ s.innerHTML="";
+ questions.forEach((q,i)=>{
+  const o=document.createElement("option");
+  o.value=i;o.textContent="السؤال "+(i+1)+" — "+q.q.slice(0,35);
+  s.appendChild(o);
+ });
+}
+function loadEditorQuestion(){
+ const i=Number($("questionSelect").value||0);
+ const q=questions[i];
+ if(!q)return;
+ $("questionInput").value=q.q;
+ q.opts.forEach((o,j)=>$("opt"+j).value=o.text);
+ $("correctSelect").value=String(q.correct);
+ $("editorMessage").classList.add("hidden");
+}
+$("questionSelect").onchange=loadEditorQuestion;
+
+function saveEditorQuestion(){
+ const i=Number($("questionSelect").value||0);
+ const q=$("questionInput").value.trim();
+ const opts=[0,1,2,3].map(j=>({text:$("opt"+j).value.trim(),emoji:questions[i]?.opts[j]?.emoji||["🧸","💙","✨","🎮"][j]}));
+ if(!q||opts.some(o=>!o.text)){
+  messageEditor("⚠️ املأ السؤال والاختيارات الأربعة أولاً.");return false;
+ }
+ questions[i]={q,opts,correct:Number($("correctSelect").value)};
+ fillSelect();$("questionSelect").value=String(i);
+ messageEditor("✅ تم حفظ السؤال والاختيارات!");
+ return true;
+}
+$("saveQuestion").onclick=saveEditorQuestion;
+
+function messageEditor(msg){
+ $("editorMessage").textContent=msg;
+ $("editorMessage").classList.remove("hidden");
+}
+$("addQuestion").onclick=()=>{
+ if(questions.length>=50){messageEditor("وصلت للحد الأقصى: 50 سؤالًا.");return}
+ if($("questionInput").value.trim()||$("opt0").value.trim()){
+  if(!saveEditorQuestion())return;
+ }
+ questions.push({q:"سؤالك الجديد؟",opts:[{text:"الاختيار الأول",emoji:"💙"},{text:"الاختيار الثاني",emoji:"🎮"},{text:"الاختيار الثالث",emoji:"🧸"},{text:"الاختيار الرابع",emoji:"✨"}],correct:0});
+ fillSelect();$("questionSelect").value=String(questions.length-1);
+ loadEditorQuestion();messageEditor("➕ أضف نص السؤال والاختيارات ثم احفظ.");
 };
-$("homeBtn").onclick=()=>show("home");
-
-$("addBtn").onclick=()=>{
-  const q=$("questionInput").value.trim();
-  const a=$("answerInput").value.trim();
-
-  if(!q||!a){
-    $("creatorMessage").textContent="⚠️ اكتب السؤال والإجابة أولاً!";
-    return;
-  }
-
-  questions.push({q,a});
-  updateCount();
-  resetForm();
-  $("creatorMessage").textContent="✅ تمت إضافة السؤال بنجاح!";
+$("deleteQuestion").onclick=()=>{
+ if(questions.length<=1){messageEditor("يجب أن يبقى سؤال واحد على الأقل.");return}
+ questions.splice(Number($("questionSelect").value||0),1);
+ fillSelect();$("questionSelect").value="0";loadEditorQuestion();
+ messageEditor("🗑️ تم حذف السؤال.");
 };
-
-function encodeQuiz(data){
-  const bytes=new TextEncoder().encode(JSON.stringify(data));
-  let binary="";
-  bytes.forEach(b=>binary+=String.fromCharCode(b));
-  return btoa(binary);
-}
-
-function decodeQuiz(encoded){
-  const binary=atob(encoded);
-  const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
-  return JSON.parse(new TextDecoder().decode(bytes));
-}
-
-$("shareBtn").onclick=async()=>{
-  if(!questions.length){
-    $("creatorMessage").textContent="⚠️ أضف سؤالاً واحداً على الأقل!";
-    return;
-  }
-
-  const url=new URL(location.href);
-  url.hash="quiz="+encodeQuiz(questions);
-
-  try{
-    await navigator.clipboard.writeText(url.href);
-    $("creatorMessage").textContent="✅ تم نسخ رابط التحدّي! ابعثه لصاحبك.";
-  }catch(e){
-    $("creatorMessage").innerHTML="";
-    const link=document.createElement("textarea");
-    link.readOnly=true;
-    link.value=url.href;
-    $("creatorMessage").appendChild(link);
-
-    const note=document.createElement("p");
-    note.textContent="انسخ الرابط أعلاه وابعثه لصاحبك 🔗";
-    $("creatorMessage").appendChild(note);
-    link.select();
-  }
+$("resetQuestions").onclick=()=>{
+ questions=structuredClone(DEFAULT_QUESTIONS);
+ fillSelect();$("questionSelect").value="0";loadEditorQuestion();
+ messageEditor("↩️ تمت استعادة الأسئلة الأصلية.");
+};
+$("editorPlay").onclick=()=>{
+ if(saveEditorQuestion())startQuiz();
 };
 
 function startQuiz(){
-  if(!questions.length){
-    $("creatorMessage").textContent="أضف أسئلة أولاً!";
-    show("creator");
-    return;
-  }
-  index=0;
-  score=0;
-  answered=false;
-  show("playing");
-  renderQuestion();
+ if(!validQuestions(questions)){show("editor");messageEditor("تأكد من أن كل سؤال لديه أربعة اختيارات.");return}
+ index=0;score=0;answered=false;selected=-1;
+ show("playing");renderQuestion();
 }
-
 function renderQuestion(){
-  answered=false;
-  $("progress").textContent="السؤال "+(index+1)+" من "+questions.length;
-  $("questionText").textContent=questions[index].q;
-  $("userAnswer").value="";
-  $("userAnswer").disabled=false;
-  $("feedback").classList.add("hidden");
-  $("nextBtn").classList.add("hidden");
-  $("submitBtn").classList.remove("hidden");
+ answered=false;selected=-1;
+ $("progress").textContent="السؤال "+(index+1)+" من "+questions.length;
+ $("progressFill").style.width=(index/questions.length*100)+"%";
+ $("questionText").textContent=questions[index].q;
+ $("feedback").classList.add("hidden");
+ $("nextBtn").classList.add("hidden");
+ const box=$("options");box.innerHTML="";
+ questions[index].opts.forEach((opt,i)=>{
+  const b=document.createElement("button");
+  b.className="option";
+  const art=document.createElement("div");art.className="art";art.textContent=opt.emoji||"✨";
+  const label=document.createElement("div");label.className="label";label.textContent=opt.text;
+  b.append(art,label);b.onclick=()=>chooseAnswer(i);box.appendChild(b);
+ });
 }
-
-function normalize(s){
-  return s.trim().toLocaleLowerCase()
-    .replace(/[أإآ]/g,"ا")
-    .replace(/ى/g,"ي")
-    .replace(/\s+/g," ");
+function chooseAnswer(choice){
+ if(answered)return;
+ answered=true;selected=choice;
+ const q=questions[index],correct=choice===q.correct;
+ if(correct)score++;
+ [...$("options").children].forEach((b,i)=>{
+  b.disabled=true;
+  if(i===q.correct)b.classList.add("correct");
+  if(i===choice&&i!==q.correct)b.classList.add("wrong");
+ });
+ $("feedback").classList.remove("hidden");
+ $("feedback").textContent=correct?"🎉 إجابة صحيحة! برافو عليك!":"💙 الإجابة الصحيحة: "+q.opts[q.correct].text;
+ $("nextBtn").classList.remove("hidden");
+ $("nextBtn").textContent=index===questions.length-1?"🏆 عرض التقييم":"السؤال التالي ←";
+ $("progressFill").style.width=((index+1)/questions.length*100)+"%";
 }
-
-$("submitBtn").onclick=()=>{
-  if(answered)return;
-
-  const answer=$("userAnswer").value.trim();
-
-  if(!answer){
-    $("feedback").textContent="اكتب إجابتك أولاً 😄";
-    $("feedback").classList.remove("hidden");
-    return;
-  }
-
-  answered=true;
-  const correct=normalize(answer)===normalize(questions[index].a);
-  const feedback=$("feedback");
-
-  feedback.classList.remove("hidden");
-  $("userAnswer").disabled=true;
-  $("submitBtn").classList.add("hidden");
-
-  // خدعة: عكس النتيجة المعروضة للمشارك
-  if(correct){
-    feedback.textContent="الإجابة غلط يا هطف😂";
-  }else{
-    score++;
-    feedback.textContent="الإجابة صحيحة! 🎉";
-  }
-
-  $("nextBtn").classList.remove("hidden");
-  createBears();
-};
-
 $("nextBtn").onclick=()=>{
-  index++;
-
-  if(index>=questions.length){
-    const rating=Math.round((score/questions.length)*10);
-
-    $("ratingValue").textContent=rating;
-    $("ratingCircle").style.setProperty("--rating",(rating*10)+"%");
-
-    const stars=Math.max(0,Math.min(5,Math.round(rating/2)));
-    $("ratingStars").innerHTML=Array.from(
-      {length:5},
-      (_,i)=>`<span>${i<stars?"⭐":"☆"}</span>`
-    ).join("");
-
-    if(rating<5){
-      $("ratingIcon").textContent="💀";
-      $("ratingTitle").textContent="يا ساتر!";
-      $("finalText").innerHTML=
-        "💔 <strong>لقد فشلت في الاختبار يا فاشل 😂</strong><br>"+
-        "تقييمك ضعيف... لازم تعاود التحدّي! 😈";
-    }else if(rating<8){
-      $("ratingIcon").textContent="🔥";
-      $("ratingTitle").textContent="نتيجة مليحة!";
-      $("finalText").innerHTML=
-        "😎 <strong>راك تتحسّن!</strong><br>"+
-        "باقي شوية وتولي أسطورة في التحدّي 💙";
-    }else{
-      $("ratingIcon").textContent="👑";
-      $("ratingTitle").textContent="أسطورة Nova!";
-      $("finalText").innerHTML=
-        "🏆 <strong>واااو! نتيجة خرافية!</strong><br>"+
-        "أنت ملك التحدّي بلا منازع! 👑✨";
-    }
-
-    show("finished");
-    createBears();
-    if(rating>=5)createConfetti();
-  }else{
-    renderQuestion();
-  }
+ if(!answered)return;
+ if(index<questions.length-1){index++;renderQuestion()}
+ else showResult();
 };
 
-$("exitBtn").onclick=()=>show("home");
-$("replayBtn").onclick=startQuiz;
-$("finishHome").onclick=()=>show("home");
-
-$("playBtn").onclick=()=>{
-  const data=location.hash.match(/^#quiz=(.+)$/);
-
-  if(data){
-    try{
-      const parsed=decodeQuiz(data[1]);
-
-      if(Array.isArray(parsed)&&parsed.length&&
-        parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
-        questions=parsed;
-        startQuiz();
-        return;
-      }
-    }catch(e){}
-  }
-
-  questions=[];
-  updateCount();
-  resetForm();
-  $("creatorMessage").textContent=
-    "افتح رابط التحدّي الذي أرسله لك صديقك، أو أنشئ أسئلة جديدة.";
-  show("creator");
-};
-
-function createBears(){
-  const emojis=["🧸","🤍","💙","🐻"];
-
-  for(let i=0;i<9;i++){
-    setTimeout(()=>{
-      const b=document.createElement("div");
-      b.className="float-bear";
-      b.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-      b.style.left=Math.random()*95+"vw";
-      b.style.fontSize=(20+Math.random()*22)+"px";
-      b.style.animationDuration=(4+Math.random()*3)+"s";
-      document.body.appendChild(b);
-      setTimeout(()=>b.remove(),7500);
-    },i*150);
-  }
+function showResult(){
+ const rating=Math.round(score/questions.length*10);
+ $("ratingValue").textContent=rating;
+ $("ratingCircle").style.setProperty("--rating",rating*10+"%");
+ const stars=Math.round(rating/2);
+ $("ratingStars").innerHTML=Array.from({length:5},(_,i)=>`<span>${i<stars?"⭐":"☆"}</span>`).join("");
+ $("scoreDetails").textContent="الإجابات الصحيحة: "+score+" من "+questions.length;
+ if(rating<5){
+  $("ratingIcon").textContent="💀";$("ratingTitle").textContent="تحتاج إلى التدريب!";
+  $("finalText").innerHTML="💔 <strong>لا تستسلم يا "+escapeHTML(currentName)+"!</strong><br>جرّب مرة أخرى، تقدر تحسّن نتيجتك 😈";
+ }else if(rating<8){
+  $("ratingIcon").textContent="🔥";$("ratingTitle").textContent="نتيجة مليحة!";
+  $("finalText").innerHTML="😎 <strong>راك تتحسّن يا "+escapeHTML(currentName)+"!</strong><br>باقي شوية وتولي أسطورة في التحدّي 💙";
+ }else{
+  $("ratingIcon").textContent="👑";$("ratingTitle").textContent="أسطورة Nova!";
+  $("finalText").innerHTML="🏆 <strong>نتيجة خرافية يا "+escapeHTML(currentName)+"!</strong><br>أنت ملك التحدّي بلا منازع! 👑✨";
+ }
+ show("finished");if(rating>=5)createConfetti();
 }
-
+function escapeHTML(s){
+ return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
 function createConfetti(){
-  const colors=["#facc15","#60a5fa","#c084fc","#fb7185","#34d399"];
-
-  for(let i=0;i<65;i++){
-    const piece=document.createElement("div");
-    piece.className="confetti";
-    piece.textContent=Math.random()>.5?"✦":"●";
-    piece.style.left=Math.random()*100+"vw";
-    piece.style.color=colors[Math.floor(Math.random()*colors.length)];
-    piece.style.fontSize=(10+Math.random()*13)+"px";
-    piece.style.animationDuration=(2+Math.random()*3)+"s";
-    piece.style.animationDelay=Math.random()*1.2+"s";
-    document.body.appendChild(piece);
-    setTimeout(()=>piece.remove(),6500);
-  }
-}
-
-const incoming=location.hash.match(/^#quiz=(.+)$/);
-
-if(incoming){
-  try{
-    const parsed=decodeQuiz(incoming[1]);
-
-    if(Array.isArray(parsed)&&parsed.length&&
-      parsed.every(x=>x&&typeof x.q==="string"&&typeof x.a==="string")){
-      questions=parsed;
-      startQuiz();
-    }
-  }catch(e){}
-}
-</script>
-</body>
-</html>
+ const colors=["#facc15","#60a5fa","#c084fc","#fb7185","#34d399"];
+ for(let i=0;i<55;i++){
+  const p=document.createElement("div");p.className="confetti";
+  p.textContent=Math.random()>.5?"✦":"●";
+  p.style.left=Math.random()*100+"vw";
+  p.style.color=colors[Math.floor(Math.random()*colors.length)];
+  p.style.fontSize=(10+Math.random()*13)+"px";
+  p.style.animationDuration=(2+Math.random()*3)+"s";
+  p.style.animationDelay=Math.random()+"s";
