@@ -10,7 +10,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;min-height:100dvh;overflow-x:hidden;font-family:Arial,sans-serif;color:white;background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);display:flex;align-items:center;justify-content:center;padding:75px 0 65px}
 .glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;animation:glowMove 8s infinite alternate ease-in-out}
-.one{background:#60a5fa;top:-70px;right:-60px}.two{background:#a78bfa;bottom:-80px;left:-60px}
+.one{background:#60a5fa;top:-70px;right:-60px}
+.two{background:#a78bfa;bottom:-80px;left:-60px;animation-delay:-4s}
 @keyframes glowMove{to{transform:translate(35px,35px) scale(1.2)}}
 button{font-family:inherit;cursor:pointer;touch-action:manipulation}
 .change-name{position:fixed;top:16px;right:14px;z-index:20;padding:10px 13px;border:1px solid #ffffff40;border-radius:13px;color:white;background:#ffffff18}
@@ -30,7 +31,6 @@ h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
 .btn:active{transform:scale(.97)}
 .primary{color:#172554;background:#bfdbfe}
 .secondary{color:white;background:#ffffff20;border:1px solid #ffffff45}
-.danger{color:white;background:#be123c}
 .hidden{display:none!important}
 .label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:5px}
 .counter{font-size:12px;color:#bfdbfe;margin:10px 0}
@@ -41,10 +41,12 @@ h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
 .float-bear{position:fixed;bottom:-40px;z-index:5;pointer-events:none;animation:rise 5s linear forwards}
 @keyframes rise{to{transform:translateY(-110vh) rotate(18deg);opacity:0}}
 @media(max-width:360px){.card{padding:23px 15px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<div class="glow one"></div><div class="glow two"></div>
+<div class="glow one"></div>
+<div class="glow two"></div>
 
 <button class="change-name" id="changeName">✏️ تغيير الاسم</button>
 <div class="name-panel" id="namePanel">
@@ -54,49 +56,50 @@ h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin-bottom:10px}
 </div>
 
 <main class="card">
-  <section id="home">
-    <div class="bears">🧸💙🧸</div>
-    <h1>تحدّي الصداقة</h1>
-    <p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
-    <button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
-    <button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
-  </section>
+<section id="home">
+<div class="bears">🧸💙🧸</div>
+<h1>تحدّي الصداقة</h1>
+<p class="desc">شكون يعرف الإجابات؟ 🤔<br>حضّر أسئلتك وتحدّى أصحابك!</p>
+<button class="btn primary" id="createBtn">➕ إنشاء أسئلة</button>
+<button class="btn secondary" id="playBtn">🎮 الإجابة عن الأسئلة</button>
+</section>
 
-  <section id="creator" class="hidden">
-    <div class="bears">📝✨</div>
-    <h1>حضّر التحدّي</h1>
-    <p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
-    <div class="counter" id="questionCount">عدد الأسئلة: 0</div>
-    <label class="label" for="questionInput">السؤال</label>
-    <textarea id="questionInput" maxlength="250" placeholder="مثلاً: ما لون السماء؟"></textarea>
-    <label class="label" for="answerInput">الإجابة الصحيحة</label>
-    <input id="answerInput" maxlength="100" placeholder="اكتب الإجابة الصحيحة">
-    <button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
-    <div id="creatorMessage"></div>
-    <button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
-    <button class="btn secondary" id="homeBtn">الرئيسية</button>
-  </section>
+<section id="creator" class="hidden">
+<div class="bears">📝✨</div>
+<h1>حضّر التحدّي</h1>
+<p class="desc">اكتب السؤال والإجابة الصحيحة، وصاحبك يحاول يجاوب!</p>
+<div class="counter" id="questionCount">عدد الأسئلة: 0</div>
+<label class="label" for="questionInput">السؤال</label>
+<textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك..."></textarea>
+<label class="label" for="answerInput">الإجابة الصحيحة</label>
+<input id="answerInput" maxlength="100" placeholder="الإجابة الصحيحة">
+<button class="btn secondary" id="addBtn">إضافة السؤال ＋</button>
+<div id="creatorMessage"></div>
+<button class="btn primary" id="shareBtn">🔗 إنشاء رابط المشاركة</button>
+<button class="btn secondary" id="homeBtn">الرئيسية</button>
+</section>
 
-  <section id="playing" class="hidden">
-    <div class="bears">🤔💭</div>
-    <h1>جاوب بصراحة!</h1>
-    <div class="counter" id="progress"></div>
-    <div class="question-box" id="questionText"></div>
-    <label class="label" for="userAnswer">إجابتك</label>
-    <input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
-    <button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
-    <div id="feedback" class="notice hidden"></div>
-    <button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
-    <button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
-  </section>
+<section id="playing" class="hidden">
+<div class="bears">🤔💭</div>
+<h1>جاوب بصراحة!</h1>
+<div class="counter" id="progress"></div>
+<div class="question-box" id="questionText"></div>
+<label class="label" for="userAnswer">إجابتك</label>
+<input id="userAnswer" maxlength="150" placeholder="اكتب إجابتك هنا...">
+<button class="btn primary" id="submitBtn">تأكيد الإجابة ✓</button>
+<div id="feedback" class="notice hidden"></div>
+<button class="btn secondary hidden" id="nextBtn">السؤال التالي ←</button>
+<button class="btn secondary" id="exitBtn">إنهاء التحدّي</button>
+</section>
 
-  <section id="finished" class="hidden">
-    <div class="bears">🏆🧸🎉</div>
-    <h1>انتهى التحدّي!</h1>
-    <p class="desc" id="finalText"></p>
-    <button class="btn primary" id="replayBtn">إعادة التحدّي ↻</button>
-    <button class="btn secondary" id="finishHome">الرئيسية</button>
-  </section>
+<section id="finished" class="hidden">
+<div class="bears">🏆🧸🎉</div>
+<h1>انتهى التحدّي!</h1>
+<div id="ratingStars" style="font-size:25px;margin:12px 0">⭐⭐⭐⭐⭐</div>
+<p class="desc" id="finalText"></p>
+<button class="btn primary" id="replayBtn">إعادة التحدّي ↻</button>
+<button class="btn secondary" id="finishHome">الرئيسية</button>
+</section>
 </main>
 
 <div class="brand">Nova <span>©</span></div>
@@ -133,8 +136,12 @@ function resetForm(){
   $("answerInput").value="";
   $("creatorMessage").textContent="";
 }
+
 $("createBtn").onclick=()=>{
-  questions=[];updateCount();resetForm();show("creator");
+  questions=[];
+  updateCount();
+  resetForm();
+  show("creator");
 };
 $("homeBtn").onclick=()=>show("home");
 
@@ -150,6 +157,7 @@ $("addBtn").onclick=()=>{
   resetForm();
   $("creatorMessage").textContent="✅ تمت إضافة السؤال بنجاح!";
 };
+
 function encodeQuiz(data){
   const bytes=new TextEncoder().encode(JSON.stringify(data));
   let binary="";
@@ -161,6 +169,7 @@ function decodeQuiz(encoded){
   const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
   return JSON.parse(new TextDecoder().decode(bytes));
 }
+
 $("shareBtn").onclick=async()=>{
   if(!questions.length){
     $("creatorMessage").textContent="⚠️ أضف سؤالاً واحداً على الأقل!";
@@ -170,26 +179,33 @@ $("shareBtn").onclick=async()=>{
   url.hash="quiz="+encodeQuiz(questions);
   try{
     await navigator.clipboard.writeText(url.href);
-    $("creatorMessage").textContent="✅ رابط التحدّي نُسخ! ابعثه لصاحبك.";
+    $("creatorMessage").textContent="✅ تم نسخ رابط التحدّي! ابعثه لصاحبك.";
   }catch(e){
     $("creatorMessage").innerHTML="";
     const link=document.createElement("textarea");
     link.readOnly=true;
     link.value=url.href;
     $("creatorMessage").appendChild(link);
+    const note=document.createElement("p");
+    note.textContent="انسخ الرابط أعلاه وابعثه لصاحبك 🔗";
+    $("creatorMessage").appendChild(note);
     link.select();
-    $("creatorMessage").append("انسخ الرابط أعلاه وابعثه لصاحبك 🔗");
   }
 };
+
 function startQuiz(){
   if(!questions.length){
     $("creatorMessage").textContent="أضف أسئلة أولاً!";
     show("creator");
     return;
   }
-  index=0;score=0;answered=false;
-  show("playing");renderQuestion();
+  index=0;
+  score=0;
+  answered=false;
+  show("playing");
+  renderQuestion();
 }
+
 function renderQuestion(){
   answered=false;
   $("progress").textContent="السؤال "+(index+1)+" من "+questions.length;
@@ -199,13 +215,15 @@ function renderQuestion(){
   $("feedback").classList.add("hidden");
   $("nextBtn").classList.add("hidden");
   $("submitBtn").classList.remove("hidden");
-  $("userAnswer").focus();
 }
+
 function normalize(s){
   return s.trim().toLocaleLowerCase()
-    .replace(/[أإآ]/g,"ا").replace(/ى/g,"ي")
+    .replace(/[أإآ]/g,"ا")
+    .replace(/ى/g,"ي")
     .replace(/\s+/g," ");
 }
+
 $("submitBtn").onclick=()=>{
   if(answered)return;
   const answer=$("userAnswer").value.trim();
@@ -214,6 +232,7 @@ $("submitBtn").onclick=()=>{
     $("feedback").classList.remove("hidden");
     return;
   }
+
   answered=true;
   const correct=normalize(answer)===normalize(questions[index].a);
   const feedback=$("feedback");
@@ -221,30 +240,40 @@ $("submitBtn").onclick=()=>{
   $("userAnswer").disabled=true;
   $("submitBtn").classList.add("hidden");
 
-  // عكس النتيجة عمداً: الصحيحة تُحسب خطأ والعكس
+  // خدعة: نقلب النتيجة المعروضة للّاعب
   if(correct){
-    feedback.innerHTML="😂❌ الموقع يقول: إجابة خاطئة!<br>لكن في الحقيقة إجابتك صحيحة!";
+    feedback.textContent="الإجابة غلط يا هطف😂";
   }else{
     score++;
-    feedback.innerHTML="🎉✅ الموقع يقول: إجابة صحيحة!<br>لكن في الحقيقة إجابتك خاطئة!<br><small>الإجابة الصحيحة: "+escapeHTML(questions[index].a)+"</small>";
+    feedback.textContent="الإجابة صحيحة! 🎉";
   }
+
   $("nextBtn").classList.remove("hidden");
   createBears();
 };
-function escapeHTML(s){
-  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+
 $("nextBtn").onclick=()=>{
   index++;
   if(index>=questions.length){
-    $("finalText").textContent="يا "+currentName+"! عدد الإجابات الخاطئة التي حسبها الموقع صحيحة هو "+score+" من "+questions.length+" 😂💙";
+    // التقييم مبني على الإجابات التي اعتبرتها اللعبة صحيحة
+    const rating=Math.round((score/questions.length)*10);
+    $("ratingStars").textContent="⭐".repeat(Math.max(1,Math.round(rating/2)));
+    $("finalText").textContent=
+      "تقييمك: "+rating+"/10"+
+      (rating<5
+        ? " — لقد فشلت في الاختبار يا فاشل 😂💀"
+        : " — مبروك! نجحت في التحدي يا أسطورة 🏆🔥");
     show("finished");
     createBears();
-  }else renderQuestion();
+  }else{
+    renderQuestion();
+  }
 };
+
 $("exitBtn").onclick=()=>show("home");
 $("replayBtn").onclick=startQuiz;
 $("finishHome").onclick=()=>show("home");
+
 $("playBtn").onclick=()=>{
   const data=location.hash.match(/^#quiz=(.+)$/);
   if(data){
@@ -257,9 +286,13 @@ $("playBtn").onclick=()=>{
       }
     }catch(e){}
   }
+  questions=[];
+  updateCount();
+  resetForm();
   $("creatorMessage").textContent="افتح رابط التحدّي الذي أرسله لك صديقك، أو أنشئ أسئلة جديدة.";
-  questions=[];updateCount();show("creator");
+  show("creator");
 };
+
 function createBears(){
   const emojis=["🧸","🤍","💙","🐻"];
   for(let i=0;i<9;i++){
@@ -275,6 +308,7 @@ function createBears(){
     },i*150);
   }
 }
+
 const incoming=location.hash.match(/^#quiz=(.+)$/);
 if(incoming){
   try{
