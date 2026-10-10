@@ -2,925 +2,472 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#10152f">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172554">
 <title>Nova | Friendship Quiz</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-:root{
-  --bg:#090d1d;
-  --card:#151b36;
-  --card2:#1d2547;
-  --primary:#8175ff;
-  --secondary:#42d9ff;
-  --text:#f4f5ff;
-  --muted:#aab1d1;
-  --green:#38d996;
-  --red:#ff627c;
-}
-
+*{box-sizing:border-box}
 body{
-  min-height:100vh;
-  font-family:Arial,Tahoma,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 10% 10%,#35266b66,transparent 35%),
-    radial-gradient(circle at 90% 90%,#12617b44,transparent 35%),
-    var(--bg);
-  padding:20px;
+ margin:0;min-height:100vh;min-height:100dvh;padding:80px 0 25px;
+ font-family:Arial,sans-serif;color:#fff;
+ background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);
+ display:flex;flex-direction:column;align-items:center;overflow-x:hidden
 }
-
-button,input,select,textarea{
-  font:inherit;
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+ outline:2px solid #bfdbfe;outline-offset:3px
 }
-
-button{
-  cursor:pointer;
-  border:none;
-  transition:.2s;
-}
-
-button:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.1);
-}
-
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  transform:none;
-}
-
-.app{
-  max-width:680px;
-  margin:auto;
-}
-
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin:8px 0 25px;
-}
-
-.logo{
-  font-size:27px;
-  font-weight:900;
-  letter-spacing:1px;
-  background:linear-gradient(90deg,#fff,var(--secondary),var(--primary));
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.logo small{
-  display:block;
-  font-size:10px;
-  letter-spacing:3px;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-.badge{
-  border:1px solid #8175ff55;
-  background:#8175ff18;
-  color:#c9c3ff;
-  border-radius:30px;
-  padding:8px 12px;
-  font-size:12px;
-}
-
+.glow{position:fixed;width:240px;height:240px;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none}
+.one{background:#60a5fa;top:-70px;right:-60px}
+.two{background:#a78bfa;bottom:-80px;left:-60px}
 .card{
-  background:linear-gradient(145deg,#171d3beF,#10152bea);
-  border:1px solid #ffffff12;
-  border-radius:24px;
-  padding:25px;
-  box-shadow:0 20px 60px #0004;
-  animation:appear .35s ease;
+ position:relative;z-index:2;width:min(460px,93vw);padding:25px 18px;
+ text-align:center;border:1px solid #ffffff35;border-radius:27px;
+ background:#ffffff13;backdrop-filter:blur(20px);
+ box-shadow:0 20px 70px #0003;margin-bottom:15px
 }
-
-@keyframes appear{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.hero{
-  text-align:center;
-  padding:15px 0 25px;
-}
-
-.hero-icon{
-  font-size:68px;
-  margin-bottom:14px;
-  filter:drop-shadow(0 0 20px #8175ff66);
-}
-
-h1{
-  font-size:29px;
-  line-height:1.5;
-  margin-bottom:10px;
-}
-
-h2{
-  font-size:22px;
-  margin-bottom:8px;
-}
-
-p{
-  color:var(--muted);
-  line-height:1.8;
-  font-size:14px;
-}
-
-.gradient-text{
-  background:linear-gradient(90deg,var(--secondary),#a99cff);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.actions{
-  display:grid;
-  gap:12px;
-  margin-top:24px;
-}
-
+@keyframes enter{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slide{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes float{50%{transform:translateY(-5px)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(650deg);opacity:0}}
+.screen{animation:enter .35s ease}
+.animate-slide{animation:slide .3s ease}
+.hidden{display:none!important}
+h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin:0 0 10px}
+.desc{font-size:14px;color:#e0e7ff;line-height:1.9;margin-bottom:18px}
+.hero-icons{display:flex;justify-content:center;align-items:center;gap:15px;margin:5px 0 20px}
+.hero-icons i{width:36px;height:36px;color:#bfdbfe;stroke-width:1.6}
+.hero-icons i:nth-child(2){width:46px;height:46px;color:#fff;animation:float 3s infinite}
 .btn{
-  width:100%;
-  padding:15px 18px;
-  border-radius:14px;
-  font-weight:bold;
-  color:white;
-  background:linear-gradient(100deg,#7567ff,#5145d9);
-  box-shadow:0 7px 25px #6655ff25;
+ width:100%;padding:13px;border:1px solid transparent;border-radius:13px;
+ font-size:15px;font-weight:bold;margin-top:9px;display:flex;
+ align-items:center;justify-content:center;gap:9px;
+ transition:transform .2s,background .2s,border-color .2s
 }
-
-.btn.secondary{
-  background:#ffffff0a;
-  border:1px solid #ffffff1c;
-  box-shadow:none;
+.btn:active{transform:scale(.98)}
+.btn i{width:19px;height:19px;flex-shrink:0}
+.primary{color:#172554;background:#bfdbfe}
+.primary:hover{background:#dbeafe}
+.secondary{color:#fff;background:#ffffff18;border-color:#ffffff45}
+.secondary:hover{background:#ffffff25}
+label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:10px}
+input,textarea,select{
+ width:100%;padding:12px;margin:7px 0 10px;border:1px solid #ffffff40;
+ border-radius:12px;color:#fff;background:#243461;font:inherit;outline:none
 }
-
-.btn.cyan{
-  background:linear-gradient(100deg,#24bddd,#3679f6);
-}
-
-.btn.danger{
-  background:#ff627c1a;
-  border:1px solid #ff627c44;
-  color:#ff91a3;
-  box-shadow:none;
-}
-
-.btn.small{
-  width:auto;
-  padding:10px 14px;
-  font-size:13px;
-}
-
-.section{
-  display:none;
-}
-
-.section.active{
-  display:block;
-  animation:appear .3s ease;
-}
-
-.field{
-  margin-top:17px;
-}
-
-label{
-  display:block;
-  font-size:13px;
-  color:#c9cdeb;
-  margin-bottom:8px;
-}
-
-input,select,textarea{
-  width:100%;
-  color:white;
-  background:#0c1127;
-  border:1px solid #ffffff1c;
-  border-radius:12px;
-  padding:13px 14px;
-  outline:none;
-}
-
-input:focus,select:focus,textarea:focus{
-  border-color:var(--primary);
-  box-shadow:0 0 0 3px #8175ff1c;
-}
-
-select option{
-  background:#151b36;
-}
-
-textarea{
-  resize:vertical;
-  min-height:85px;
-}
-
-input::placeholder,textarea::placeholder{
-  color:#747c9e;
-}
-
-.editor-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.counter{
-  background:#8175ff20;
-  border:1px solid #8175ff44;
-  padding:8px 12px;
-  border-radius:12px;
-  font-size:12px;
-  white-space:nowrap;
-}
-
-.editor-progress{
-  height:5px;
-  background:#ffffff12;
-  border-radius:20px;
-  overflow:hidden;
-  margin:15px 0 20px;
-}
-
-.editor-progress div{
-  height:100%;
-  width:10%;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  transition:width .2s;
-}
-
-.options-editor{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.option-field{
-  background:#ffffff05;
-  padding:10px;
-  border-radius:13px;
-  border:1px solid #ffffff0b;
-}
-
-.option-field label{
-  font-size:12px;
-}
-
-.option-field input{
-  padding:11px;
-}
-
-.editor-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:18px;
-}
-
-.editor-actions .btn{
-  padding:12px 8px;
-  font-size:13px;
-}
-
-.editor-actions .wide{
-  grid-column:1/-1;
-}
-
-.question-meta{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:18px;
-}
-
-.progress-track{
-  height:6px;
-  background:#ffffff12;
-  border-radius:20px;
-  overflow:hidden;
-  margin-bottom:23px;
-}
-
-.progress-fill{
-  height:100%;
-  width:0;
-  background:linear-gradient(90deg,var(--primary),var(--secondary));
-  transition:width .3s;
-}
-
-.question-title{
-  font-size:21px;
-  line-height:1.8;
-  margin-bottom:20px;
-}
-
-.answer-list{
-  display:grid;
-  gap:11px;
-}
-
-.answer{
-  width:100%;
-  text-align:right;
-  color:white;
-  padding:15px;
-  background:#ffffff08;
-  border:1px solid #ffffff15;
-  border-radius:14px;
-  line-height:1.6;
-}
-
-.answer:hover{
-  border-color:var(--primary);
-  background:#8175ff12;
-}
-
-.answer.correct{
-  border-color:var(--green);
-  background:#38d99619;
-}
-
-.answer.wrong{
-  border-color:var(--red);
-  background:#ff627c19;
-}
-
-.feedback{
-  display:none;
-  margin-top:15px;
-  padding:13px;
-  border-radius:12px;
-  line-height:1.7;
-  font-size:14px;
-}
-
-.feedback.show{
-  display:block;
-}
-
-.feedback.good{
-  background:#38d99615;
-  color:#72f0ba;
-}
-
-.feedback.bad{
-  background:#ff627c15;
-  color:#ff9baa;
-}
-
-.next-wrap{
-  margin-top:15px;
-}
-
-.result{
-  text-align:center;
-}
-
-.score-circle{
-  width:145px;
-  height:145px;
-  margin:22px auto;
-  border-radius:50%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  background:radial-gradient(circle,#272653,#11152c);
-  border:5px solid #8175ff;
-  box-shadow:0 0 35px #8175ff30;
-}
-
-.score-circle strong{
-  font-size:38px;
-}
-
-.score-circle span{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:5px;
-}
-
+input::placeholder,textarea::placeholder{color:#cbd5e1}
+textarea{resize:vertical;min-height:75px}
+select option{background:#172554;color:#fff}
+.counter{font-size:13px;color:#bfdbfe;margin:10px 0}
 .notice{
-  display:none;
-  margin:14px 0 0;
-  padding:12px;
-  border-radius:12px;
-  background:#8175ff16;
-  border:1px solid #8175ff33;
-  color:#d2ceff;
-  font-size:13px;
-  line-height:1.7;
-  overflow-wrap:anywhere;
+ padding:12px;margin-top:12px;border:1px solid #ffffff30;
+ border-radius:13px;background:#ffffff12;line-height:1.8;overflow-wrap:anywhere
 }
-
-.notice.show{
-  display:block;
+.notice-line{display:flex;align-items:center;justify-content:center;gap:8px}
+.notice-line i{width:20px;height:20px;flex-shrink:0}
+.question-box{
+ padding:17px 12px;border:1px solid #ffffff30;border-radius:17px;
+ background:#ffffff10;font-size:19px;font-weight:bold;line-height:1.8;margin:16px 0
 }
-
-footer{
-  text-align:center;
-  padding:24px 0 8px;
-  color:#737b9d;
-  font-size:12px;
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.option{
+ min-width:0;min-height:120px;padding:12px 7px;border:2px solid #ffffff35;
+ border-radius:18px;background:#ffffff12;color:#fff;display:flex;
+ flex-direction:column;align-items:center;justify-content:center;gap:10px;
+ transition:background .2s,border-color .2s,transform .2s
 }
-
-@media(max-width:480px){
-  body{padding:13px}
-  .card{padding:19px}
-  h1{font-size:25px}
-  .hero-icon{font-size:56px}
-  .options-editor{grid-template-columns:1fr}
-  .editor-actions{grid-template-columns:1fr 1fr}
+.option:active{transform:scale(.97)}
+.option .art{
+ width:43px;height:43px;border-radius:14px;display:grid;place-items:center;
+ background:#ffffff12;border:1px solid #ffffff20;color:#bfdbfe
+}
+.option .art i{width:25px;height:25px;stroke-width:1.7}
+.option .opttext{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.option.correct{border-color:#22c55e;background:#16a34a40}
+.option.correct .art{background:#16a34a30;color:#86efac}
+.option.wrong{border-color:#ef4444;background:#dc262640}
+.option.wrong .art{background:#dc262630;color:#fca5a5}
+.option:disabled{cursor:default}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:#dbeafe}
+.number-track{display:flex;direction:ltr;gap:4px;margin:10px 0}
+.num{
+ flex:1;min-width:0;height:32px;border:1px solid #ffffff40;border-radius:8px;
+ background:#ffffff13;color:#fff;font-size:11px;font-weight:bold;display:grid;place-items:center
+}
+.num.active{outline:2px solid #bfdbfe;outline-offset:1px}
+.num.done-good{background:#16a34a;border-color:#4ade80}
+.num.done-bad{background:#dc2626;border-color:#f87171}
+.progress{height:7px;border-radius:20px;background:#ffffff20;overflow:hidden;margin:10px 0 17px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#c4b5fd);transition:width .35s}
+.brand{
+ width:fit-content;padding:7px 18px;border:1px solid #ffffff35;border-radius:30px;
+ background:#ffffff12;font-size:12px;font-weight:bold;letter-spacing:2px
+}
+.brand span,.menu-logo span{color:#93c5fd}
+.rating-icon{
+ width:76px;height:76px;border-radius:24px;margin:10px auto 18px;
+ display:grid;place-items:center;background:#ffffff12;border:1px solid #ffffff25;
+ color:#fde68a;animation:float 2s infinite
+}
+.rating-icon i{width:40px;height:40px;stroke-width:1.5}
+.rating-circle{
+ --rating:0%;width:150px;height:150px;margin:20px auto;border-radius:50%;
+ display:grid;place-items:center;
+ background:conic-gradient(#facc15 var(--rating),#ffffff18 var(--rating));position:relative
+}
+.rating-circle:before{
+ content:"";position:absolute;inset:9px;border-radius:50%;
+ background:#172554;border:1px solid #ffffff25
+}
+.rating-number{z-index:1;font-size:38px;font-weight:900;color:#fde68a}
+.rating-number small{font-size:15px;color:#dbeafe}
+.rating-stars{display:flex;justify-content:center;gap:5px;margin:12px 0;color:#facc15}
+.rating-stars i{width:22px;height:22px;stroke-width:1.7}
+.rating-message{
+ padding:15px 10px;margin:15px 0;border:1px solid #ffffff30;
+ border-radius:18px;background:#ffffff12;line-height:2
+}
+.rating-message strong{color:#fde68a;font-size:18px}
+.small{font-size:12px;color:#cbd5e1;line-height:1.8;margin-top:10px}
+.confetti{position:fixed;top:-20px;z-index:100;pointer-events:none;animation:fall linear forwards;color:#bfdbfe}
+.confetti i{width:14px;height:14px}
+.menu-btn{
+ position:fixed;top:16px;right:16px;z-index:1002;width:46px;height:46px;
+ display:flex;justify-content:center;align-items:center;border:1px solid #ffffff45;
+ border-radius:14px;background:#172554dd;color:#fff;backdrop-filter:blur(15px);
+ box-shadow:0 5px 20px #0002
+}
+.menu-btn i{width:23px;height:23px}
+.menu-btn:active{transform:scale(.96)}
+.menu-overlay{
+ position:fixed;inset:0;z-index:1003;background:#030817a8;backdrop-filter:blur(4px);
+ opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s
+}
+.menu-overlay.open{opacity:1;visibility:visible}
+.side-menu{
+ position:fixed;top:0;right:0;z-index:1004;width:min(320px,85vw);
+ height:100vh;height:100dvh;padding:75px 22px 25px;
+ background:linear-gradient(160deg,#172554,#111b40 65%,#312e81);
+ border-left:1px solid #ffffff25;box-shadow:-15px 0 50px #0004;
+ transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1);
+ display:flex;flex-direction:column;visibility:hidden
+}
+.side-menu.open{transform:translateX(0);visibility:visible}
+.close-menu{
+ position:absolute;top:18px;left:18px;width:40px;height:40px;display:grid;place-items:center;
+ border:1px solid #ffffff35;border-radius:12px;color:#fff;background:#ffffff15
+}
+.close-menu i{width:20px;height:20px}
+.menu-logo{font-size:30px;font-weight:900;letter-spacing:2px}
+.menu-desc{margin-top:8px;color:#cbd5e1;font-size:14px}
+.menu-divider{height:1px;margin:22px 0;background:#ffffff25}
+.instagram-link{
+ display:flex;align-items:center;gap:12px;padding:14px 12px;border:1px solid #ffffff30;
+ border-radius:17px;color:#fff;text-decoration:none;background:#ffffff10;
+ transition:transform .25s,background .25s,border-color .25s
+}
+.instagram-link:hover{transform:translateY(-2px);background:#ffffff20;border-color:#c084fc}
+.instagram-icon{
+ width:45px;height:45px;flex-shrink:0;display:grid;place-items:center;border-radius:14px;
+ background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)
+}
+.instagram-icon i{width:27px;height:27px;color:#fff}
+.instagram-text{display:flex;flex-direction:column;gap:5px;text-align:right;min-width:0}
+.instagram-text strong{font-size:13px}
+.instagram-text small{color:#bfdbfe;font-size:12px}
+.instagram-arrow{margin-right:auto;color:#c4b5fd;display:grid;place-items:center}
+.instagram-arrow i{width:19px;height:19px}
+.menu-footer{
+ margin-top:auto;padding-top:25px;text-align:center;color:#94a3b8;font-size:12px;
+ display:flex;justify-content:center;align-items:center;gap:7px
+}
+.menu-footer i{width:15px;height:15px;color:#93c5fd}
+body.menu-open{overflow:hidden}
+@media(max-width:360px){
+ .card{padding:20px 12px}.option{min-height:105px}.num{font-size:9px;height:28px}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="glow one"></div>
+<div class="glow two"></div>
 
-<header>
-  <div class="logo">
-    NOVA
-    <small>FRIENDSHIP QUIZ</small>
-  </div>
-  <div class="badge">✦ اختبارات الصداقة</div>
-</header>
+<button id="menuBtn" class="menu-btn" aria-label="فتح القائمة" aria-expanded="false">
+ <i data-lucide="menu"></i>
+</button>
+<div id="menuOverlay" class="menu-overlay"></div>
 
-<!-- الصفحة الرئيسية -->
-<section id="home" class="section active">
-  <div class="card">
-    <div class="hero">
-      <div class="hero-icon">🧸</div>
-      <h1>اختبر قوة <span class="gradient-text">صداقتكم</span></h1>
-      <p>
-        أنشئ اختبارك الخاص، شاركه مع أصدقائك،
-        واكتشف من يعرفك أكثر!
-      </p>
-    </div>
+<aside id="sideMenu" class="side-menu" aria-hidden="true">
+ <button id="closeMenu" class="close-menu" aria-label="إغلاق القائمة"><i data-lucide="x"></i></button>
+ <div class="menu-logo">Nova <span>✦</span></div>
+ <p class="menu-desc">عالم الصداقة</p>
+ <div class="menu-divider"></div>
+ <a class="instagram-link" href="https://www.instagram.com/gojoy_u?psln=MTJvNXhzcDF1czVrNA==" target="_blank" rel="noopener noreferrer">
+  <span class="instagram-icon"><i data-lucide="instagram"></i></span>
+  <span class="instagram-text"><strong>تابعني على إنستغرام</strong><small>@gojoy_u</small></span>
+  <span class="instagram-arrow"><i data-lucide="arrow-up-right"></i></span>
+ </a>
+ <div class="menu-footer"><i data-lucide="heart"></i> Made with care by Nova</div>
+</aside>
 
-    <div class="actions">
-      <button class="btn" id="createBtn">＋ إنشاء اختبار خاص</button>
-      <button class="btn secondary" id="joinBtn">♡ لدي رابط اختبار</button>
-    </div>
-  </div>
+<main class="card">
+<section id="home" class="screen">
+ <div class="hero-icons"><i data-lucide="users"></i><i data-lucide="heart-handshake"></i><i data-lucide="sparkles"></i></div>
+ <h1>تحدّي الصداقة</h1>
+ <p class="desc">أنشئ اختبارًا خاصًا بك، وأرسل الرابط لصديقك!</p>
+ <button class="btn primary" id="createBtn"><i data-lucide="file-pen-line"></i> إنشاء اختبار خاص بي</button>
+ <button class="btn secondary" id="answerBtn"><i data-lucide="gamepad-2"></i> لديّ رابط اختبار</button>
+ <p class="small">يمكنك تعديل الأسئلة العشرة والاختيارات كما تريد.</p>
 </section>
 
-<!-- صفحة إنشاء الاختبار -->
-<section id="editor" class="section">
-  <div class="card">
+<section id="editor" class="hidden screen">
+ <div class="hero-icons"><i data-lucide="file-pen-line"></i><i data-lucide="sliders-horizontal"></i></div>
+ <h1>إنشاء اختبارك</h1>
+ <label for="creatorName">اسم صاحب الاختبار</label>
+ <input id="creatorName" maxlength="30" placeholder="اكتب اسمك">
+ <label for="targetName">اسم الصديق المستهدف (اختياري)</label>
+ <input id="targetName" maxlength="30" placeholder="مثلاً: نوري">
 
-    <div class="editor-top">
-      <div>
-        <h2>إنشاء اختبارك ✨</h2>
-        <p>خصص الأسئلة ثم شارك الرابط.</p>
-      </div>
-      <div class="counter" id="editorCounter">السؤال 1 / 10</div>
-    </div>
-
-    <div class="field">
-      <label for="creatorName">اسم صاحب الاختبار</label>
-      <input id="creatorName" maxlength="35" placeholder="مثلاً: Abdnor">
-    </div>
-
-    <div class="field">
-      <label for="targetName">اسم الصديق (اختياري)</label>
-      <input id="targetName" maxlength="35" placeholder="اتركه فارغاً ليستعمله الجميع">
-    </div>
-
-    <div class="editor-progress">
-      <div id="editorProgress"></div>
-    </div>
-
-    <div class="field">
-      <label for="questionPicker">اختر السؤال الذي تريد تعديله</label>
-      <select id="questionPicker"></select>
-    </div>
-
-    <div class="field">
-      <label for="questionInput">نص السؤال</label>
-      <textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك هنا..."></textarea>
-    </div>
-
-    <div class="field">
-      <label>الاختيارات الأربعة</label>
-      <div class="options-editor">
-        <div class="option-field">
-          <label for="option0">الاختيار 1</label>
-          <input id="option0" maxlength="100" placeholder="الاختيار الأول">
-        </div>
-        <div class="option-field">
-          <label for="option1">الاختيار 2</label>
-          <input id="option1" maxlength="100" placeholder="الاختيار الثاني">
-        </div>
-        <div class="option-field">
-          <label for="option2">الاختيار 3</label>
-          <input id="option2" maxlength="100" placeholder="الاختيار الثالث">
-        </div>
-        <div class="option-field">
-          <label for="option3">الاختيار 4</label>
-          <input id="option3" maxlength="100" placeholder="الاختيار الرابع">
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="correctPicker">ما الإجابة الصحيحة؟</label>
-      <select id="correctPicker">
-        <option value="0">الاختيار 1</option>
-        <option value="1">الاختيار 2</option>
-        <option value="2">الاختيار 3</option>
-        <option value="3">الاختيار 4</option>
-      </select>
-    </div>
-
-    <div class="editor-actions">
-      <button class="btn secondary" id="previousQuestion">← السابق</button>
-      <button class="btn secondary" id="nextQuestion">التالي →</button>
-      <button class="btn cyan wide" id="saveQuestion">✓ حفظ السؤال</button>
-      <button class="btn wide" id="shareBtn">🔗 حفظ الاختبار وإنشاء الرابط</button>
-      <button class="btn secondary wide" id="editorHome">العودة للرئيسية</button>
-    </div>
-
-    <div class="notice" id="editorNotice"></div>
-  </div>
+ <div style="display:flex;gap:8px;margin-top:12px">
+  <button class="btn secondary" id="prevQBtn" style="margin-top:0"><i data-lucide="arrow-right"></i> السابق</button>
+  <button class="btn secondary" id="nextQBtn" style="margin-top:0">التالي <i data-lucide="arrow-left"></i></button>
+ </div>
+ <div class="counter" id="editorCount"></div>
+ <label for="questionInput">نص السؤال</label>
+ <textarea id="questionInput" maxlength="250" placeholder="اكتب السؤال"></textarea>
+ <label>الاختيارات الأربعة</label>
+ <input id="opt0" maxlength="100" placeholder="الاختيار الأول">
+ <input id="opt1" maxlength="100" placeholder="الاختيار الثاني">
+ <input id="opt2" maxlength="100" placeholder="الاختيار الثالث">
+ <input id="opt3" maxlength="100" placeholder="الاختيار الرابع">
+ <label for="correctSelect">حدّد الإجابة الصحيحة</label>
+ <select id="correctSelect">
+  <option value="0">الاختيار الأول</option><option value="1">الاختيار الثاني</option>
+  <option value="2">الاختيار الثالث</option><option value="3">الاختيار الرابع</option>
+ </select>
+ <div id="editorMessage" class="notice hidden"></div>
+ <button class="btn primary" id="shareBtn"><i data-lucide="link"></i> حفظ وإنشاء رابط الاختبار</button>
+ <button class="btn secondary" id="editorHome"><i data-lucide="house"></i> الرئيسية</button>
 </section>
 
-<!-- صفحة إدخال الرابط -->
-<section id="join" class="section">
-  <div class="card">
-    <div class="hero">
-      <div class="hero-icon">🔗</div>
-      <h2>انضم إلى الاختبار</h2>
-      <p>ألصق رابط الاختبار الذي أرسله لك صديقك.</p>
-    </div>
-
-    <div class="field">
-      <label for="quizUrl">رابط الاختبار</label>
-      <textarea id="quizUrl" placeholder="ألصق الرابط هنا..."></textarea>
-    </div>
-
-    <div class="actions">
-      <button class="btn" id="openQuizBtn">ابدأ الاختبار</button>
-      <button class="btn secondary" id="joinHome">العودة للرئيسية</button>
-    </div>
-
-    <div class="notice" id="joinNotice"></div>
-  </div>
+<section id="join" class="hidden screen">
+ <div class="hero-icons"><i data-lucide="mail"></i><i data-lucide="user-round"></i></div>
+ <h1>أهلاً بك في الاختبار!</h1>
+ <p class="desc" id="joinDesc">أدخل اسمك لتبدأ الإجابة عن الأسئلة.</p>
+ <label for="responderName">اسم الشخص الذي سيجيب</label>
+ <input id="responderName" maxlength="30" placeholder="اكتب اسمك">
+ <button class="btn primary" id="beginBtn"><i data-lucide="play"></i> ابدأ الاختبار</button>
+ <div id="joinMessage" class="notice hidden"></div>
+ <button class="btn secondary" id="joinHome"><i data-lucide="house"></i> الرئيسية</button>
 </section>
 
-<!-- صفحة اللعب -->
-<section id="playing" class="section">
-  <div class="card">
-
-    <div class="question-meta">
-      <div class="badge" id="quizOwner">اختبار صداقة</div>
-      <div class="counter" id="questionCounter">1 / 10</div>
-    </div>
-
-    <div class="progress-track">
-      <div class="progress-fill" id="quizProgress"></div>
-    </div>
-
-    <h2 class="question-title" id="questionText"></h2>
-
-    <div class="answer-list" id="answerList"></div>
-
-    <div class="feedback" id="feedback"></div>
-
-    <div class="next-wrap">
-      <button class="btn" id="nextBtn" style="display:none">
-        السؤال التالي ←
-      </button>
-    </div>
-  </div>
+<section id="playing" class="hidden screen">
+ <div class="hero-icons"><i data-lucide="brain"></i><i data-lucide="lightbulb"></i></div>
+ <h1 id="gameTitle">اختبار الصداقة</h1>
+ <div class="progress-label"><span id="progressText">السؤال 1 من 10</span><span id="progressPercent">0%</span></div>
+ <div class="number-track" id="numberTrack"></div>
+ <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+ <div class="question-box" id="questionText"></div>
+ <div class="options" id="options"></div>
+ <div id="feedback" class="notice hidden"></div>
+ <button class="btn secondary" id="quitBtn"><i data-lucide="house"></i> الرئيسية</button>
 </section>
 
-<!-- صفحة النتيجة -->
-<section id="finished" class="section">
-  <div class="card result">
-    <div class="hero-icon">🏆</div>
-    <h1>انتهى الاختبار!</h1>
-    <p id="resultMessage">هذه نتيجتك.</p>
-
-    <div class="score-circle">
-      <strong id="scoreNumber">0/10</strong>
-      <span>إجابتك الصحيحة</span>
-    </div>
-
-    <p id="resultDetails"></p>
-
-    <div class="actions">
-      <button class="btn" id="retryBtn">إعادة الاختبار</button>
-      <button class="btn cyan" id="shareResultBtn">مشاركة النتيجة</button>
-      <button class="btn secondary" id="resultHome">الرئيسية</button>
-    </div>
-
-    <div class="notice" id="resultNotice"></div>
-  </div>
+<section id="finished" class="hidden screen">
+ <div class="rating-icon" id="ratingIcon"><i data-lucide="trophy"></i></div>
+ <h1 id="ratingTitle">انتهى الاختبار!</h1>
+ <p class="desc" id="resultSubtitle"></p>
+ <div class="rating-circle" id="ratingCircle"><div class="rating-number"><span id="ratingValue">0</span><small>/10</small></div></div>
+ <div class="rating-stars" id="ratingStars"></div>
+ <div class="rating-message" id="finalText"></div>
+ <p class="desc" id="scoreDetails"></p>
+ <button class="btn primary" id="replayBtn"><i data-lucide="rotate-ccw"></i> إعادة الاختبار</button>
+ <button class="btn secondary" id="finishHome"><i data-lucide="house"></i> الرئيسية</button>
 </section>
+</main>
 
-<footer>Made with ✦ by Nova</footer>
-</div>
+<div class="brand">Nova <span>✦</span></div>
 
 <script>
-"use strict";
+const $=id=>document.getElementById(id);
+const screenIds=["home","editor","join","playing","finished"];
 
-const $ = id => document.getElementById(id);
+let creator="",target="",responder="",questions=[],currentIndex=0;
+let score=0,answered=false,marks=[],pendingQuiz=null;
 
-const defaultQuestions = [
-  { q:"ما هو لوني المفضل؟", options:["الأحمر","الأزرق","الأسود","الأخضر"], correct:2 },
-  { q:"ما هي لعبتي المفضلة؟", options:["Minecraft","Free Fire","PUBG","Roblox"], correct:1 },
-  { q:"ما هو أكثر شيء أحبه؟", options:["النوم","الأكل","اللعب","الخروج"], correct:2 },
-  { q:"ما هو نوع المحتوى الذي أحبه؟", options:["الأنمي","الرياضة","الطبخ","السفر"], correct:0 },
-  { q:"ماذا أفعل عندما أشعر بالملل؟", options:["أنام","ألعب","أقرأ","أخرج"], correct:1 },
-  { q:"ما هو مشروبي المفضل؟", options:["الماء","العصير","القهوة","المشروبات الغازية"], correct:1 },
-  { q:"ما هو الوقت الذي أفضله؟", options:["الصباح","الظهيرة","المساء","منتصف الليل"], correct:3 },
-  { q:"ما أكثر شيء يزعجني؟", options:["الكذب","الانتظار","الضجيج","الملل"], correct:0 },
-  { q:"كيف أصف نفسي؟", options:["هادئ","مرح","غامض","كل ما سبق"], correct:3 },
-  { q:"ما أهمية الصداقة بالنسبة لي؟", options:["عادية","مهمة جداً","غير مهمة","لا أعرف"], correct:1 }
+function refreshIcons(){
+ if(window.lucide) window.lucide.createIcons();
+}
+
+function show(id){
+ screenIds.forEach(s=>$(s).classList.toggle("hidden",s!==id));
+ window.scrollTo({top:0,behavior:"smooth"});
+ refreshIcons();
+}
+
+function message(id,text){
+ $(id).textContent=text;
+ $(id).classList.remove("hidden");
+}
+
+function showFeedback(correct,text){
+ const box=$("feedback");
+ box.replaceChildren();
+ const row=document.createElement("div");
+ row.className="notice-line";
+ const ico=document.createElement("i");
+ ico.setAttribute("data-lucide",correct?"check-circle-2":"circle-x");
+ const span=document.createElement("span");
+ span.textContent=text;
+ row.append(ico,span);
+ box.appendChild(row);
+ box.classList.remove("hidden");
+ refreshIcons();
+}
+
+function validQuiz(d){
+ return !!d &&
+ typeof d.creator==="string" &&
+ typeof d.target==="string" &&
+ Array.isArray(d.questions) &&
+ d.questions.length===10 &&
+ d.questions.every(q=>
+  q && typeof q.q==="string" &&
+  Array.isArray(q.opts) && q.opts.length===4 &&
+  q.opts.every(o=>o&&typeof o.text==="string") &&
+  Number.isInteger(q.correct) && q.correct>=0 && q.correct<4
+ );
+}
+
+function encodeData(obj){
+ const bytes=new TextEncoder().encode(JSON.stringify(obj));
+ let binary="";
+ bytes.forEach(b=>binary+=String.fromCharCode(b));
+ return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+
+function decodeData(str){
+ str=str.replace(/-/g,"+").replace(/_/g,"/");
+ while(str.length%4)str+="=";
+ const binary=atob(str);
+ const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));
+ return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+const defaults=[
+ {q:"على ماذا ينفق معظم ماله؟",opts:["الوجبات الخفيفة والطعام","يدّخر المال","الألعاب","الملابس"],correct:0},
+ {q:"ما أكثر شيء يحبّه في وقت الفراغ؟",opts:["الألعاب","النوم","الخروج","الأنمي"],correct:3},
+ {q:"ما الذي يفرحه أكثر؟",opts:["هدية","رسالة من صديق","وجبة لذيذة","الفوز"],correct:1},
+ {q:"إذا حصل على المال، ماذا يفعل؟",opts:["يشتري شيئًا","يدّخره","يدعو أصدقاءه","يشحن لعبة"],correct:3},
+ {q:"ما نوع الفيديوهات التي يحبّها؟",opts:["الأنمي","الألعاب","الضحك","كل الأنواع"],correct:0},
+ {q:"كيف يقضي يوم العطلة؟",opts:["ينام","يلعب","يتنزه","يشاهد فيلمًا"],correct:1},
+ {q:"أي هدية قد تعجبه أكثر؟",opts:["سماعات","لعبة","حلوى","هدية من صديق"],correct:3},
+ {q:"ماذا يفعل عندما يشعر بالملل؟",opts:["يفتح الهاتف","يلعب","يتحدث مع أصدقائه","ينام"],correct:0},
+ {q:"أين يفضّل الخروج؟",opts:["مطعم","حديقة","مركز ألعاب","مع الأصدقاء"],correct:3},
+ {q:"ما الأهم في الصداقة؟",opts:["الثقة","الضحك","المساعدة","كل ما سبق"],correct:3}
 ];
 
-let questions = cloneQuestions(defaultQuestions);
-let currentQuestion = 0;
-let quizData = null;
-let playerName = "";
-let playerAnswers = [];
-let score = 0;
-let answered = false;
-let autoNextTimer = null;
-let lastResultText = "";
-let lastResultTitle = "";
+const optionIcons=["wallet","gamepad-2","gift","users"];
 
-function cloneQuestions(data){
-  return data.map(q => ({
-    q: q.q,
-    options: [...q.options],
-    correct: q.correct
-  }));
+function cloneDefaults(){
+ return defaults.map(q=>({
+  q:q.q,
+  opts:q.opts.map(text=>({text})),
+  correct:q.correct
+ }));
 }
 
-function showSection(id){
-  document.querySelectorAll(".section").forEach(section=>{
-    section.classList.remove("active");
-  });
-  $(id).classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function showNotice(id,message){
-  const box = $(id);
-  box.textContent = message;
-  box.classList.add("show");
-}
-
-function hideNotice(id){
-  $(id).classList.remove("show");
-}
-
-function encodeData(data){
-  const bytes = new TextEncoder().encode(JSON.stringify(data));
-  let binary = "";
-  bytes.forEach(byte => binary += String.fromCharCode(byte));
-  return btoa(binary);
-}
-
-function decodeData(encoded){
-  const binary = atob(encoded);
-  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
-  return JSON.parse(new TextDecoder().decode(bytes));
-}
-
-function validateQuiz(data){
-  if(!data || !Array.isArray(data.questions)) return false;
-  if(data.questions.length < 1 || data.questions.length > 50) return false;
-
-  return data.questions.every(q =>
-    typeof q.q === "string" &&
-    q.q.trim().length > 0 &&
-    Array.isArray(q.options) &&
-    q.options.length === 4 &&
-    q.options.every(o => typeof o === "string" && o.trim().length > 0) &&
-    Number.isInteger(q.correct) &&
-    q.correct >= 0 && q.correct <= 3
-  );
-}
-
-function clearAutoNext(){
-  if(autoNextTimer !== null){
-    clearTimeout(autoNextTimer);
-    autoNextTimer = null;
-  }
-}
-
-/* الصفحة الرئيسية */
-$("createBtn").onclick = () => {
-  questions = cloneQuestions(defaultQuestions);
-  $("creatorName").value = "";
-  $("targetName").value = "";
-  populateQuestionPicker();
-  loadQuestion(0);
-  hideNotice("editorNotice");
-  showSection("editor");
+$("createBtn").onclick=()=>{
+ creator="";target="";
+ questions=cloneDefaults();
+ currentIndex=0;
+ $("creatorName").value="";
+ $("targetName").value="";
+ $("editorMessage").classList.add("hidden");
+ loadEditorQuestion();
+ show("editor");
 };
 
-$("joinBtn").onclick = () => {
-  $("quizUrl").value = "";
-  hideNotice("joinNotice");
-  showSection("join");
-};
+$("editorHome").onclick=()=>show("home");
+$("quitBtn").onclick=()=>show("home");
+$("finishHome").onclick=()=>show("home");
+$("joinHome").onclick=()=>show("home");
 
-$("editorHome").onclick = () => showSection("home");
-$("joinHome").onclick = () => showSection("home");
-$("resultHome").onclick = () => {
-  clearAutoNext();
-  showSection("home");
-};
+function saveCurrentEditorQuestion(){
+ const q=$("questionInput").value.trim();
+ const opts=[0,1,2,3].map(i=>$("opt"+i).value.trim());
+ if(!q||opts.some(o=>!o))return false;
 
-/* محرر الأسئلة */
-function populateQuestionPicker(){
-  const picker = $("questionPicker");
-  picker.innerHTML = "";
-
-  questions.forEach((question, index) => {
-    const option = document.createElement("option");
-    option.value = index;
-    option.textContent = "السؤال " + (index + 1);
-    picker.appendChild(option);
-  });
+ questions[currentIndex]={
+  q,
+  opts:opts.map(text=>({text})),
+  correct:Number($("correctSelect").value)
+ };
+ return true;
 }
 
-function loadQuestion(index){
-  currentQuestion = index;
-  const question = questions[index];
-
-  $("questionPicker").value = index;
-  $("questionInput").value = question.q;
-
-  question.options.forEach((option, i) => {
-    $("option" + i).value = option;
-  });
-
-  $("correctPicker").value = question.correct;
-  $("editorCounter").textContent = "السؤال " + (index + 1) + " / " + questions.length;
-  $("editorProgress").style.width = ((index + 1) / questions.length * 100) + "%";
-
-  $("previousQuestion").disabled = index === 0;
-  $("nextQuestion").disabled = index === questions.length - 1;
+function loadEditorQuestion(){
+ $("editorMessage").classList.add("hidden");
+ const q=questions[currentIndex];
+ $("questionInput").value=q.q;
+ q.opts.forEach((o,j)=>$("opt"+j).value=o.text);
+ $("correctSelect").value=String(q.correct);
+ $("editorCount").textContent="السؤال "+(currentIndex+1)+" من "+questions.length;
 }
 
-function saveCurrentQuestion(showMessage = true){
-  const q = $("questionInput").value.trim();
-  const options = [0,1,2,3].map(i => $("option" + i).value.trim());
-  const correct = Number($("correctPicker").value);
-
-  if(!q){
-    if(showMessage) showNotice("editorNotice","اكتب نص السؤال أولاً.");
-    return false;
-  }
-
-  if(options.some(option => !option)){
-    if(showMessage) showNotice("editorNotice","يرجى ملء الاختيارات الأربعة.");
-    return false;
-  }
-
-  questions[currentQuestion] = { q, options, correct };
-
-  if(showMessage){
-    showNotice("editorNotice","تم حفظ السؤال بنجاح ✓");
-  }
-
-  return true;
-}
-
-$("saveQuestion").onclick = () => {
-  saveCurrentQuestion(true);
+$("nextQBtn").onclick=()=>{
+ if(!saveCurrentEditorQuestion()){
+  message("editorMessage","يرجى ملء نص السؤال والاختيارات الأربعة قبل الانتقال.");
+  return;
+ }
+ if(currentIndex<questions.length-1){
+  currentIndex++;
+  loadEditorQuestion();
+ }else{
+  message("editorMessage","هذا هو السؤال الأخير. يمكنك إنشاء الرابط الآن.");
+ }
 };
 
-$("questionPicker").onchange = () => {
-  const newIndex = Number($("questionPicker").value);
-
-  if(!saveCurrentQuestion(false)){
-    $("questionPicker").value = currentQuestion;
-    showNotice("editorNotice","أكمل السؤال والاختيارات قبل الانتقال.");
-    return;
-  }
-
-  hideNotice("editorNotice");
-  loadQuestion(newIndex);
+$("prevQBtn").onclick=()=>{
+ if(!saveCurrentEditorQuestion()){
+  message("editorMessage","يرجى ملء السؤال والاختيارات الحالية أولاً.");
+  return;
+ }
+ if(currentIndex>0){
+  currentIndex--;
+  loadEditorQuestion();
+ }
 };
 
-$("previousQuestion").onclick = () => {
-  if(!saveCurrentQuestion()) return;
-  if(currentQuestion > 0) loadQuestion(currentQuestion - 1);
-};
+$("shareBtn").onclick=async()=>{
+ creator=$("creatorName").value.trim();
+ target=$("targetName").value.trim();
 
-$("nextQuestion").onclick = () => {
-  if(!saveCurrentQuestion()) return;
-  if(currentQuestion < questions.length - 1){
-    loadQuestion(currentQuestion + 1);
-  }
-};
+ if(!creator){
+  message("editorMessage","اكتب اسم صاحب الاختبار أولاً.");
+  return;
+ }
+ if(!saveCurrentEditorQuestion()){
+  message("editorMessage","يرجى ملء السؤال الحالي والاختيارات الأربعة.");
+  return;
+ }
 
-/* إنشاء رابط الاختبار */
-$("shareBtn").onclick = async () => {
-  if(!saveCurrentQuestion()) return;
+ const url=new URL(location.href);
+ url.hash="quiz="+encodeData({creator,target,questions});
 
-  const creator = $("creatorName").value.trim();
-  const target = $("targetName").value.trim();
+ const box=$("editorMessage");
+ box.replaceChildren();
 
-  if(!creator){
-    showNotice("editorNotice","اكتب اسم صاحب الاختبار أولاً.");
-    $("creatorName").focus();
-    return;
-  }
+ const p=document.createElement("p");
+ p.textContent="رابط اختبارك جاهز. انسخه وأرسله لصديقك:";
+ const area=document.createElement("textarea");
+ area.value=url.href;
+ area.readOnly=true;
+ area.style.minHeight="100px";
+ area.setAttribute("aria-label","رابط الاختبار");
 
-  const data = {
-    version: 1,
-    creator,
-    target,
-    questions: cloneQuestions(questions)
-  };
-
-  let link;
-
-  try{
-    link = location.href.split("#")[0] + "#quiz=" + encodeData(data);
-  }catch(error){
-    showNotice("editorNotice","تعذر إنشاء الرابط. حاول مجدداً.");
-    return;
-  }
-
-  try{
-    await copyText(link);
-    showNotice("editorNotice","تم إنشاء الرابط ونسخه! أرسله لأصدقائك عبر الرسائل.");
-  }catch(error){
-    showNotice("editorNotice","تم إنشاء الرابط، انسخه من المربع أدناه.");
-  }
-
-  let linkBox = $("generatedLink");
-
-  if(!linkBox){
-    linkBox = document.createElement("textarea");
-    linkBox.id = "generatedLink";
-    linkBox.readOnly = true;
-    linkBox.style.marginTop = "12px";
-    $("editorNotice").after(linkBox);
-  }
-
-  linkBox.value = link;
-  linkBox.style.display = "block";
-  linkBox.onclick = () => linkBox.select();
-};
-
-/* فتح رابط الاختبار (محسّنة بالكامل لقراءة الروابط بدقة) */
-function extractQuizFromLink(text){
-  const input = text.trim();
-  let encoded = "";
-
-  if(input.startsWith("#quiz=")){
-    encoded = input.slice(6);
-  } else {
-    try{
-      let urlStr = input;
-      if(!urlStr.startsWith("http://") && !urlStr.startsWith("https://")){
-        urlStr = "https://" + urlStr;
-      }
-      const url = new URL(urlStr);
-      if(url.hash.startsWith("#quiz=")){
-        encoded = url.hash.slice(6);
-      }
-    }catch(error){
-      const match = input.match(/#quiz=([A-Za-z0-9+/=]+)/);
-      if(match && match[1]){
-        encoded = match[1];
-      }
-    }
-  }
-
-  if(!encoded) throw new Error("الرابط غير صحيح أو لا يحتوي على اختبار.");
-
-  const data = decodeData(encoded);
-
-  if(!validateQuiz(data)){
-    throw new Error("بيانات الاختبار غير مكتملة أو غير صالحة.");
-  }
-
-  return data;
-}
-
-$("openQuizBtn").onclick = () =
+ const copyBtn=document.createElement("
