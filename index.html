@@ -470,4 +470,280 @@ $("shareBtn").onclick=async()=>{
  area.style.minHeight="100px";
  area.setAttribute("aria-label","رابط الاختبار");
 
- const copyBtn=document.createElement("
+ const copyBtn=document.createElement("button");
+ copyBtn.className="btn primary";
+ copyBtn.innerHTML='<i data-lucide="copy"></i> نسخ الرابط';
+
+ copyBtn.onclick=async()=>{
+  try{
+   if(navigator.clipboard&&window.isSecureContext){
+    await navigator.clipboard.writeText(url.href);
+   }else{
+    area.focus();
+    area.select();
+    if(!document.execCommand("copy"))throw new Error("Copy failed");
+   }
+   copyBtn.innerHTML='<i data-lucide="check"></i> تم نسخ الرابط';
+   refreshIcons();
+  }catch(e){
+   area.focus();
+   area.select();
+   message("editorMessage","تعذّر النسخ التلقائي. حدّد الرابط واضغط نسخ.");
+  }
+ };
+
+ box.append(p,area,copyBtn);
+ box.classList.remove("hidden");
+ refreshIcons();
+};
+
+function openJoin(data){
+ if(!validQuiz(data)){
+  alert("رابط الاختبار غير صالح.");
+  show("home");
+  return;
+ }
+ pendingQuiz=data;
+ $("joinMessage").classList.add("hidden");
+ $("responderName").value="";
+ $("joinDesc").textContent="أُنشئ هذا الاختبار بواسطة "+data.creator+".";
+ show("join");
+}
+
+function extractQuizFromInput(input){
+ input=input.trim();
+ try{
+  let part=input.includes("quiz=")
+   ?input.split("quiz=")[1].split("&")[0].split("#")[0]
+   :input.replace(/^#?quiz=/,"");
+  return decodeData(decodeURIComponent(part));
+ }catch(e){
+  return null;
+ }
+}
+ $("answerBtn").onclick=()=>{
+ const link=prompt("ألصق رابط اختبار الصداقة هنا:");
+ if(!link)return;
+ const data=extractQuizFromInput(link);
+ if(!data||!validQuiz(data)){
+  alert("الرابط غير صالح. تأكد من نسخه كاملًا.");
+  return;
+ }
+ openJoin(data);
+};
+
+$("beginBtn").onclick=()=>{
+ if(!pendingQuiz||!validQuiz(pendingQuiz)){
+  message("joinMessage","لم يتم تحميل اختبار صالح.");
+  return;
+ }
+ responder=$("responderName").value.trim();
+ if(!responder){
+  message("joinMessage","اكتب اسمك أولاً.");
+  return;
+ }
+
+ creator=pendingQuiz.creator;
+ target=pendingQuiz.target;
+ questions=pendingQuiz.questions.map(q=>({
+  q:q.q,opts:q.opts.map(o=>({text:o.text})),correct:q.correct
+ }));
+
+ if(target&&responder.toLowerCase()!==target.toLowerCase()){
+  if(!confirm("الاختبار مخصص لـ "+target+". هل تريد المتابعة؟"))return;
+ }
+
+ currentIndex=0;
+ score=0;
+ marks=[];
+ answered=false;
+ $("gameTitle").textContent="اختبار "+creator;
+ show("playing");
+ renderQuestion();
+};
+
+function renderQuestion(){
+ const q=questions[currentIndex];
+ if(!q)return;
+
+ answered=false;
+ $("feedback").classList.add("hidden");
+ $("questionText").textContent=q.q;
+ $("progressText").textContent="السؤال "+(currentIndex+1)+" من "+questions.length;
+
+ const percent=Math.round(currentIndex/questions.length*100);
+ $("progressPercent").textContent=percent+"%";
+ $("progressFill").style.width=percent+"%";
+
+ const track=$("numberTrack");
+ track.replaceChildren();
+
+ questions.forEach((_,i)=>{
+  const n=document.createElement("div");
+  n.className="num";
+  n.textContent=i+1;
+  if(i===currentIndex)n.classList.add("active");
+  if(marks[i]===true)n.classList.add("done-good");
+  if(marks[i]===false)n.classList.add("done-bad");
+  track.appendChild(n);
+ });
+
+ const options=$("options");
+ options.replaceChildren();
+
+ const icons=["wallet","gamepad-2","gift","users"];
+                   
+ q.opts.forEach((opt,i)=>{
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="option";
+
+  const art=document.createElement("span");
+  art.className="art";
+  const ico=document.createElement("i");
+  ico.setAttribute("data-lucide",icons[i]);
+
+  const text=document.createElement("span");
+  text.className="opttext";
+  text.textContent=opt.text;
+
+  art.appendChild(ico);
+  button.append(art,text);
+  button.onclick=()=>choose(i);
+  options.appendChild(button);
+ });
+
+ refreshIcons();
+}
+
+function choose(index){
+ if(answered)return;
+ answered=true;
+
+ const q=questions[currentIndex];
+ const correct=index===q.correct;
+ marks[currentIndex]=correct;
+ if(correct)score++;
+
+ [...$("options").children].forEach((button,i)=>{
+  button.disabled=true;
+  if(i===q.correct)button.classList.add("correct");
+  if(i===index&&!correct)button.classList.add("wrong");
+ });
+
+ const feedback=correct
+  ?"إجابة صحيحة! أحسنت يا "+responder+"."
+  :"الإجابة الصحيحة هي: "+q.opts[q.correct].text;
+
+ showFeedback(correct,feedback);
+
+ $("progressFill").style.width=Math.round((currentIndex+1)/questions.length*100)+"%";
+ $("progressPercent").textContent=Math.round((currentIndex+1)/questions.length*100)+"%";
+
+ const nums=$("numberTrack").children;
+ if(nums[currentIndex]){
+  nums[currentIndex].classList.remove("active");
+  nums[currentIndex].classList.add(correct?"done-good":"done-bad");
+ }
+
+ setTimeout(()=>{
+  if(currentIndex<questions.length-1){
+   currentIndex++;
+   renderQuestion();
+  }else{
+   showResults();
+  }
+ },1200);
+}
+
+function showResults(){
+ show("finished");
+ const total=questions.length;
+ const percent=Math.round(score/total*100);
+
+ $("ratingValue").textContent=score;
+ $("ratingCircle").style.setProperty("--rating",percent+"%");
+ $("ratingTitle").textContent=percent===100?"صداقة أسطورية!":"انتهى الاختبار!";
+ $("resultSubtitle").textContent=responder+"، هذه نتيجتك في اختبار "+creator+".";
+ $("scoreDetails").textContent="أجبت إجابة صحيحة عن "+score+" من "+total+" أسئلة.";
+
+ let title,description,symbol;
+
+ if(percent===100){
+  title="صديق يعرف التفاصيل!";
+  description="رائع! أجبت عن جميع الأسئلة بشكل صحيح.";
+  symbol="crown";
+  symbol="crown";
+ }else if(percent>=70){
+  title="صداقة قوية!";
+  description="نتيجة ممتازة! يبدو أنك تعرف صديقك جيدًا.";
+  symbol="medal";
+ }else if(percent>=40){
+  title="تحتاجان إلى وقت أكثر!";
+  description="هناك تفاصيل أخرى يمكنك اكتشافها عن صديقك.";
+  symbol="handshake";
+ }else{
+  title="بداية جميلة!";
+  description="الفرصة ما زالت أمامكما لتتعرفا على بعضكما أكثر.";
+  symbol="heart";
+ }
+
+ $("ratingIcon").replaceChildren();
+ const icon=document.createElement("i");
+ icon.setAttribute("data-lucide",symbol);
+ $("ratingIcon").appendChild(icon);
+
+ $("finalText").replaceChildren();
+ const strong=document.createElement("strong");
+ strong.textContent=title;
+ const desc=document.createElement("div");
+ desc.textContent=description;
+ $("finalText").append(strong,desc);
+
+ const stars=$("ratingStars");
+ stars.replaceChildren();
+ const starCount=score>=9?5:score>=7?4:score>=5?3:score>=3?2:score>=1?1:0;
+
+ for(let i=0;i<5;i++){
+  const star=document.createElement("i");
+  star.setAttribute("data-lucide","star");
+  if(i>=starCount)star.style.opacity=".3";
+  stars.appendChild(star);
+ }
+
+ $("replayBtn").onclick=()=>{
+  currentIndex=0;
+  score=0;
+  marks=[];
+  answered=false;
+  show("playing");
+  renderQuestion();
+ };
+
+ refreshIcons();
+ if(percent>=70)createConfetti();
+}
+
+function createConfetti(){
+ const icons=["sparkles","star","circle","heart","plus"];
+
+ for(let i=0;i<24;i++){
+  const piece=document.createElement("span");
+  piece.className="confetti";
+  piece.style.left=Math.random()*100+"vw";
+  piece.style.animationDuration=(2+Math.random()*3)+"s";
+  piece.style.animationDelay=(Math.random()*1.5)+"s";
+
+  const ico=document.createElement("i");
+  ico.setAttribute("data-lucide",icons[Math.floor(Math.random()*icons.length)]);
+  piece.appendChild(ico);
+  document.body.appendChild(piece);
+
+  setTimeout(()=>piece.remove(),6500);
+ }
+ refreshIcons();
+}
+
+function openMenu(){
+ $("menuBtn").setAttribute
+ 
