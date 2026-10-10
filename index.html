@@ -470,280 +470,345 @@ $("shareBtn").onclick=async()=>{
  area.style.minHeight="100px";
  area.setAttribute("aria-label","رابط الاختبار");
 
- const copyBtn=document.createElement("button");
- copyBtn.className="btn primary";
- copyBtn.innerHTML='<i data-lucide="copy"></i> نسخ الرابط';
-
- copyBtn.onclick=async()=>{
+ 
+const copyBtn=document.createElement("button");
+copyBtn.className="btn primary";
+copyBtn.innerHTML='<i data-lucide="copy"></i> نسخ الرابط';
+copyBtn.onclick=async()=>{
   try{
-   if(navigator.clipboard&&window.isSecureContext){
-    await navigator.clipboard.writeText(url.href);
-   }else{
+    await navigator.clipboard.writeText(area.value);
+    copyBtn.innerHTML='<i data-lucide="check"></i> تم نسخ الرابط';
+  }catch(e){
     area.focus();
     area.select();
-    if(!document.execCommand("copy"))throw new Error("Copy failed");
-   }
-   copyBtn.innerHTML='<i data-lucide="check"></i> تم نسخ الرابط';
-   refreshIcons();
-  }catch(e){
-   area.focus();
-   area.select();
-   message("editorMessage","تعذّر النسخ التلقائي. حدّد الرابط واضغط نسخ.");
+    try{
+      document.execCommand("copy");
+      copyBtn.textContent="تم النسخ";
+    }catch(err){
+      copyBtn.textContent="انسخ الرابط يدويًا";
+    }
   }
- };
-
- box.append(p,area,copyBtn);
- box.classList.remove("hidden");
- refreshIcons();
+  refreshIcons();
+};
+box.append(p,area,copyBtn);
+box.classList.remove("hidden");
+refreshIcons();
 };
 
-function openJoin(data){
- if(!validQuiz(data)){
-  alert("رابط الاختبار غير صالح.");
-  show("home");
-  return;
- }
- pendingQuiz=data;
- $("joinMessage").classList.add("hidden");
- $("responderName").value="";
- $("joinDesc").textContent="أُنشئ هذا الاختبار بواسطة "+data.creator+".";
- show("join");
-}
-
-function extractQuizFromInput(input){
- input=input.trim();
- try{
-  let part=input.includes("quiz=")
-   ?input.split("quiz=")[1].split("&")[0].split("#")[0]
-   :input.replace(/^#?quiz=/,"");
-  return decodeData(decodeURIComponent(part));
- }catch(e){
-  return null;
- }
-}
- $("answerBtn").onclick=()=>{
- const link=prompt("ألصق رابط اختبار الصداقة هنا:");
- if(!link)return;
- const data=extractQuizFromInput(link);
- if(!data||!validQuiz(data)){
-  alert("الرابط غير صالح. تأكد من نسخه كاملًا.");
-  return;
- }
- openJoin(data);
+$("answerBtn").onclick=()=>{
+  $("responderName").value="";
+  $("joinMessage").classList.add("hidden");
+  const hash=location.hash;
+  if(hash.startsWith("#quiz=")){
+    try{
+      pendingQuiz=decodeData(hash.slice(6));
+      if(!validQuiz(pendingQuiz))throw new Error("invalid");
+      $("joinDesc").textContent="أُنشئ هذا الاختبار بواسطة "+pendingQuiz.creator+".";
+    }catch(e){
+      pendingQuiz=null;
+      $("joinDesc").textContent="رابط الاختبار غير صالح أو تالف.";
+      message("joinMessage","تأكد من أن الرابط كامل وصحيح.");
+    }
+  }else{
+    pendingQuiz=null;
+    $("joinDesc").textContent="أدخل اسمك لتبدأ الإجابة عن الأسئلة.";
+    message("joinMessage","افتح رابط الاختبار الذي أرسله لك صديقك.");
+  }
+  show("join");
 };
 
 $("beginBtn").onclick=()=>{
- if(!pendingQuiz||!validQuiz(pendingQuiz)){
-  message("joinMessage","لم يتم تحميل اختبار صالح.");
-  return;
- }
- responder=$("responderName").value.trim();
- if(!responder){
-  message("joinMessage","اكتب اسمك أولاً.");
-  return;
- }
-
- creator=pendingQuiz.creator;
- target=pendingQuiz.target;
- questions=pendingQuiz.questions.map(q=>({
-  q:q.q,opts:q.opts.map(o=>({text:o.text})),correct:q.correct
- }));
-
- if(target&&responder.toLowerCase()!==target.toLowerCase()){
-  if(!confirm("الاختبار مخصص لـ "+target+". هل تريد المتابعة؟"))return;
- }
-
- currentIndex=0;
- score=0;
- marks=[];
- answered=false;
- $("gameTitle").textContent="اختبار "+creator;
- show("playing");
- renderQuestion();
+  responder=$("responderName").value.trim();
+  if(!responder)return message("joinMessage","اكتب اسمك أولاً.");
+  if(!validQuiz(pendingQuiz))return message("joinMessage","رابط الاختبار غير صالح.");
+  creator=pendingQuiz.creator;
+  target=pendingQuiz.target;
+  questions=pendingQuiz.questions;
+  currentIndex=0;score=0;answered=false;marks=[];
+  $("gameTitle").textContent=target?"اختبار "+target:"اختبار الصداقة";
+  show("playing");
+  renderQuestion();
 };
 
 function renderQuestion(){
- const q=questions[currentIndex];
- if(!q)return;
+  answered=false;
+  const q=questions[currentIndex];
+  $("questionText").textContent=q.q;
+  $("feedback").classList.add("hidden");
+  $("progressText").textContent="السؤال "+(currentIndex+1)+" من "+questions.length;
+  const pct=Math.round(currentIndex/questions.length*100);
+  $("progressPercent").textContent=pct+"%";
+  $("progressFill").style.width=pct+"%";
 
- answered=false;
- $("feedback").classList.add("hidden");
- $("questionText").textContent=q.q;
- $("progressText").textContent="السؤال "+(currentIndex+1)+" من "+questions.length;
+  const track=$("numberTrack");
+  track.replaceChildren();
+  questions.forEach((_,i)=>{
+    const n=document.createElement("div");
+    n.className="num";
+    n.textContent=i+1;
+    if(i===currentIndex)n.classList.add("active");
+    if(marks[i]===true)n.classList.add("done-good");
+    if(marks[i]===false)n.classList.add("done-bad");
+    track.appendChild(n);
+  });
 
- const percent=Math.round(currentIndex/questions.length*100);
- $("progressPercent").textContent=percent+"%";
- $("progressFill").style.width=percent+"%";
-
- const track=$("numberTrack");
- track.replaceChildren();
-
- questions.forEach((_,i)=>{
-  const n=document.createElement("div");
-  n.className="num";
-  n.textContent=i+1;
-  if(i===currentIndex)n.classList.add("active");
-  if(marks[i]===true)n.classList.add("done-good");
-  if(marks[i]===false)n.classList.add("done-bad");
-  track.appendChild(n);
- });
-
- const options=$("options");
- options.replaceChildren();
-
- const icons=["wallet","gamepad-2","gift","users"];
-                   
- q.opts.forEach((opt,i)=>{
-  const button=document.createElement("button");
-  button.type="button";
-  button.className="option";
-
-  const art=document.createElement("span");
-  art.className="art";
-  const ico=document.createElement("i");
-  ico.setAttribute("data-lucide",icons[i]);
-
-  const text=document.createElement("span");
-  text.className="opttext";
-  text.textContent=opt.text;
-
-  art.appendChild(ico);
-  button.append(art,text);
-  button.onclick=()=>choose(i);
-  options.appendChild(button);
- });
-
- refreshIcons();
+  const options=$("options");
+  options.replaceChildren();
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement("button");
+    btn.className="option";
+    btn.innerHTML='<span class="art"><i data-lucide="circle"></i></span>';
+    const text=document.createElement("span");
+    text.className="opttext";
+    text.textContent=opt.text;
+    btn.appendChild(text);
+    btn.onclick=()=>answerQuestion(i);
+    options.appendChild(btn);
+  });
+  refreshIcons();
 }
 
-function choose(index){
- if(answered)return;
- answered=true;
+function answerQuestion(index){
+  if(answered)return;
+  answered=true;
+  const q=questions[currentIndex];
+  const correct=index===q.correct;
+  if(correct)score++;
+  marks[currentIndex]=correct;
 
- const q=questions[currentIndex];
- const correct=index===q.correct;
- marks[currentIndex]=correct;
- if(correct)score++;
+  [...$("options").children].forEach((btn,i)=>{
+    btn.disabled=true;
+    const icon=btn.querySelector("[data-lucide]");
+    if(i===q.correct){
+      btn.classList.add("correct");
+      icon.setAttribute("data-lucide","check-circle-2");
+    }else if(i===index){
+      btn.classList.add("wrong");
+      icon.setAttribute("data-lucide","x-circle");
+    }
+  });
 
- [...$("options").children].forEach((button,i)=>{
-  button.disabled=true;
-  if(i===q.correct)button.classList.add("correct");
-  if(i===index&&!correct)button.classList.add("wrong");
- });
-
- const feedback=correct
-  ?"إجابة صحيحة! أحسنت يا "+responder+"."
-  :"الإجابة الصحيحة هي: "+q.opts[q.correct].text;
-
- showFeedback(correct,feedback);
-
- $("progressFill").style.width=Math.round((currentIndex+1)/questions.length*100)+"%";
- $("progressPercent").textContent=Math.round((currentIndex+1)/questions.length*100)+"%";
-
- const nums=$("numberTrack").children;
- if(nums[currentIndex]){
-  nums[currentIndex].classList.remove("active");
-  nums[currentIndex].classList.add(correct?"done-good":"done-bad");
- }
-
- setTimeout(()=>{
-  if(currentIndex<questions.length-1){
-   currentIndex++;
-   renderQuestion();
-  }else{
-   showResults();
-  }
- },1200);
+  showFeedback(correct,correct?"إجابة صحيحة! أحسنت 🎉":"ليست الإجابة الصحيحة.");
+  const next=document.createElement("button");
+  next.className="btn primary";
+  next.innerHTML=currentIndex===questions.length-1?
+    'عرض النتيجة <i data-lucide="trophy"></i>':
+    'السؤال التالي <i data-lucide="arrow-left"></i>';
+  next.onclick=()=>{
+    currentIndex++;
+    if(currentIndex<questions.length)renderQuestion();
+    else showResults();
+  };
+  $("feedback").appendChild(next);
+  $("progressFill").style.width=Math.round((currentIndex+1)/questions.length*100)+"%";
+  $("progressPercent").textContent=Math.round((currentIndex+1)/questions.length*100)+"%";
+  refreshIcons();
 }
 
 function showResults(){
- show("finished");
- const total=questions.length;
- const percent=Math.round(score/total*100);
+  show("finished");
+  $("ratingValue").textContent=score;
+  $("ratingCircle").style.setProperty("--rating",(score/questions.length*100)+"%");
+  $("ratingTitle").textContent=score===questions.length?"صداقة أسطورية!":score>=7?"صداقة رائعة!":score>=4?"صداقة جميلة!":"حان وقت التعارف أكثر!";
+  $("resultSubtitle").textContent=responder+" أكمل اختبار "+creator+".";
+  $("finalText").textContent=score===questions.length?"إجابات مثالية! يبدو أنك تعرفه جيدًا.":"أجبت إجابة صحيحة عن "+score+" من "+questions.length+" أسئلة.";
+  $("scoreDetails").textContent="النتيجة: "+Math.round(score/questions.length*100)+"٪";
+  $("ratingStars").replaceChildren();
+  for(let i=0;i<5;i++){
+    const star=document.createElement("i");
+    star.setAttribute("data-lucide","star");
+    $("ratingStars").appendChild(star);
+  }
+  refreshIcons();
+}
 
- $("ratingValue").textContent=score;
- $("ratingCircle").style.setProperty("--rating",percent+"%");
- $("ratingTitle").textContent=percent===100?"صداقة أسطورية!":"انتهى الاختبار!";
- $("resultSubtitle").textContent=responder+"، هذه نتيجتك في اختبار "+creator+".";
- $("scoreDetails").textContent="أجبت إجابة صحيحة عن "+score+" من "+total+" أسئلة.";
-
- let title,description,symbol;
-
- if(percent===100){
-  title="صديق يعرف التفاصيل!";
-  description="رائع! أجبت عن جميع الأسئلة بشكل صحيح.";
-  symbol="crown";
-  symbol="crown";
- }else if(percent>=70){
-  title="صداقة قوية!";
-  description="نتيجة ممتازة! يبدو أنك تعرف صديقك جيدًا.";
-  symbol="medal";
- }else if(percent>=40){
-  title="تحتاجان إلى وقت أكثر!";
-  description="هناك تفاصيل أخرى يمكنك اكتشافها عن صديقك.";
-  symbol="handshake";
- }else{
-  title="بداية جميلة!";
-  description="الفرصة ما زالت أمامكما لتتعرفا على بعضكما أكثر.";
-  symbol="heart";
- }
-
- $("ratingIcon").replaceChildren();
- const icon=document.createElement("i");
- icon.setAttribute("data-lucide",symbol);
- $("ratingIcon").appendChild(icon);
-
- $("finalText").replaceChildren();
- const strong=document.createElement("strong");
- strong.textContent=title;
- const desc=document.createElement("div");
- desc.textContent=description;
- $("finalText").append(strong,desc);
-
- const stars=$("ratingStars");
- stars.replaceChildren();
- const starCount=score>=9?5:score>=7?4:score>=5?3:score>=3?2:score>=1?1:0;
-
- for(let i=0;i<5;i++){
-  const star=document.createElement("i");
-  star.setAttribute("data-lucide","star");
-  if(i>=starCount)star.style.opacity=".3";
-  stars.appendChild(star);
- }
-
- $("replayBtn").onclick=()=>{
-  currentIndex=0;
-  score=0;
-  marks=[];
-  answered=false;
+$("replayBtn").onclick=()=>{
+  if(!validQuiz(pendingQuiz)){show("home");return;}
+  currentIndex=0;score=0;answered=false;marks=[];
+  questions=pendingQuiz.questions;
   show("playing");
   renderQuestion();
- };
+};
 
- refreshIcons();
- if(percent>=70)createConfetti();
+const menuBtn=$("menuBtn");
+const sideMenu=$("sideMenu");
+const overlay=$("menuOverlay");
+
+function setMenu(open){
+  sideMenu.classList.toggle("open",open);
+  overlay.classList.toggle("open",open);
+  document.body.classList.toggle("menu-open",open);
+  sideMenu.setAttribute("aria-hidden",String(!open));
+  menuBtn.setAttribute("aria-expanded",String(open));
+  menuBtn.innerHTML=open?'<i data-lucide="x"></i>':'<i data-lucide="menu"></i>';
+  refreshIcons();
+}
+menuBtn.onclick=()=>setMenu(!sideMenu.classList.contains("open"));
+$("closeMenu").onclick=()=>setMenu(false);
+overlay.onclick=()=>setMenu(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false);});
+
+function loadFromHash(){
+  if(location.hash.startsWith("#quiz=")){
+    try{
+      pendingQuiz=decodeData(location.hash.slice(6));
+      if(validQuiz(pendingQuiz)){
+        $("joinDesc").textContent="أُنشئ هذا الاختبار بواسطة "+pendingQuiz.creator+".";
+      }
+    }catch(e){pendingQuiz=null;}
+  }
+}
+loadFromHash();
+
+/* ===== NOVA THEME STUDIO ===== */
+const themeCSS=document.createElement("style");
+themeCSS.textContent=`
+#nova-theme-btn{
+ position:fixed;bottom:22px;left:18px;z-index:9998;
+ width:54px;height:54px;border:1px solid #ffffff55;
+ border-radius:18px;color:white;font-size:25px;
+ background:linear-gradient(135deg,var(--nova-accent,#6366f1),#a855f7);
+ box-shadow:0 0 25px var(--nova-glow,#6366f180);
+ cursor:pointer;transition:transform .3s
+}
+#nova-theme-btn:hover{transform:rotate(15deg) scale(1.08)}
+#nova-theme-panel{
+ position:fixed;left:16px;bottom:88px;z-index:9999;
+ width:min(310px,calc(100vw - 32px));max-height:75dvh;overflow:auto;
+ padding:20px;color:white;background:#111827f2;
+ border:1px solid #ffffff30;border-radius:22px;
+ box-shadow:0 15px 50px #0008;backdrop-filter:blur(20px);
+ display:none;text-align:right
+}
+#nova-theme-panel.open{display:block;animation:novaPanelIn .25s ease}
+@keyframes novaPanelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.nova-title{font-size:19px;font-weight:800;margin-bottom:15px}
+.nova-label{display:block;margin:13px 0 8px;font-size:13px;color:#cbd5e1}
+.nova-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.nova-swatch{height:40px;border:2px solid #ffffff50;border-radius:12px;cursor:pointer}
+.nova-swatch:focus{outline:2px solid white;outline-offset:2px}
+.nova-custom-color{width:100%;height:42px;padding:3px;border:1px solid #ffffff30;border-radius:10px;background:#ffffff10}
+.nova-select,.nova-reset{
+ width:100%;padding:11px;margin-top:8px;border-radius:12px;
+ border:1px solid #ffffff30;background:#26324b;color:white;font:inherit
+}
+.nova-reset{cursor:pointer;background:#ffffff12}
+#nova-theme-panel input[type=checkbox]{width:auto;accent-color:var(--nova-accent,#6366f1)}
+body.nova-glow .card{box-shadow:0 0 28px var(--nova-glow,#6366f166),0 20px 70px #0003}
+body.nova-aurora{
+ background-image:radial-gradient(ellipse at 10% 15%,var(--nova-glow,#6366f155),transparent 40%),radial-gradient(ellipse at 90% 85%,#a855f755,transparent 45%),linear-gradient(135deg,#101d46,#3730a3,#2563eb);
+ background-attachment:fixed
+}
+body.nova-motion .card,body.nova-motion .btn,body.nova-motion .option{
+ transition:all .35s ease
+}
+#nova-stars-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.nova-star{position:absolute;color:var(--nova-accent,#bfdbfe);opacity:0;animation:novaStar 4s ease-in-out infinite}
+@keyframes novaStar{0%,100%{opacity:0;transform:translateY(8px) scale(.6)}50%{opacity:.8;transform:translateY(-12px) scale(1)}}
+@media(prefers-reduced-motion:reduce){#nova-theme-btn,#nova-theme-panel,.nova-star{animation:none!important;transition:none!important}}
+`;
+document.head.appendChild(themeCSS);
+
+const themeBtn=document.createElement("button");
+themeBtn.id="nova-theme-btn";
+themeBtn.type="button";
+themeBtn.setAttribute("aria-label","تخصيص ألوان وتأثيرات Nova");
+themeBtn.textContent="✦";
+document.body.appendChild(themeBtn);
+
+const themePanel=document.createElement("div");
+themePanel.id="nova-theme-panel";
+themePanel.dir="rtl";
+themePanel.innerHTML=`
+ <div class="nova-title">✦ Nova Theme Studio</div>
+ <label class="nova-label">اختر لون موقعك</label>
+ <div class="nova-swatches">
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#2563eb,#8b5cf6)" data-color="#6366f1" aria-label="أزرق بنفسجي"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#059669,#34d399)" data-color="#10b981" aria-label="أخضر"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#db2777,#fb7185)" data-color="#ec4899" aria-label="وردي"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#ea580c,#facc15)" data-color="#f59e0b" aria-label="ذهبي"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#0891b2,#67e8f9)" data-color="#06b6d4" aria-label="سماوي"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#dc2626,#f87171)" data-color="#ef4444" aria-label="أحمر"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#475569,#cbd5e1)" data-color="#94a3b8" aria-label="فضي"></button>
+  <button class="nova-swatch" style="background:linear-gradient(135deg,#111827,#64748b)" data-color="#64748b" aria-label="رمادي"></button>
+ </div>
+ <label class="nova-label" for="nova-color-picker">لون مخصص</label>
+ <input class="nova-custom-color" id="nova-color-picker" type="color" value="#6366f1">
+ <label class="nova-label" for="nova-effect-picker">التأثيرات البصرية</label>
+ <select class="nova-select" id="nova-effect-picker">
+  <option value="normal">عادي وأنيق</option>
+  <option value="glow">توهج النيون ✨</option>
+  <option value="aurora">الشفق المتدرج 🌌</option>
+  <option value="motion">انتقالات ناعمة</option>
+ </select>
+ <label class="nova-label"><input type="checkbox" id="nova-stars-toggle"> نجوم متحركة ✦</label>
+ <button type="button" class="nova-reset" id="nova-reset">↺ استعادة المظهر الأصلي</button>
+`;
+document.body.appendChild(themePanel);
+
+const themePicker=document.getElementById("nova-color-picker");
+const effectPicker=document.getElementById("nova-effect-picker");
+const starsToggle=document.getElementById("nova-stars-toggle");
+
+function setNovaColor(color){
+ document.documentElement.style.setProperty("--nova-accent",color);
+ document.documentElement.style.setProperty("--nova-glow",color+"66");
+ document.documentElement.style.setProperty("--primary",color);
+ document.documentElement.style.setProperty("--primary-color",color);
+ document.documentElement.style.setProperty("--accent",color);
+ themePicker.value=color;
 }
 
-function createConfetti(){
- const icons=["sparkles","star","circle","heart","plus"];
+function setNovaEffect(value){
+ document.body.classList.remove("nova-glow","nova-aurora","nova-motion");
+ if(value!=="normal")document.body.classList.add("nova-"+value);
+}
 
- for(let i=0;i<24;i++){
-  const piece=document.createElement("span");
-  piece.className="confetti";
-  piece.style.left=Math.random()*100+"vw";
-  piece.style.animationDuration=(2+Math.random()*3)+"s";
-  piece.style.animationDelay=(Math.random()*1.5)+"s";
-
-  const ico=document.createElement("i");
-  ico.setAttribute("data-lucide",icons[Math.floor(Math.random()*icons.length)]);
-  piece.appendChild(ico);
-  document.body.appendChild(piece);
-
-  setTimeout(()=>piece.remove(),6500);
+function setNovaStars(enabled){
+ let layer=document.getElementById("nova-stars-layer");
+ if(!enabled){if(layer)layer.remove();return;}
+ if(layer)return;
+ layer=document.createElement("div");
+ layer.id="nova-stars-layer";
+ layer.setAttribute("aria-hidden","true");
+ for(let i=0;i<30;i++){
+  const star=document.createElement("span");
+  star.className="nova-star";
+  star.textContent="✦";
+  star.style.left=Math.random()*100+"%";
+  star.style.top=Math.random()*100+"%";
+  star.style.animationDelay=Math.random()*4+"s";
+  star.style.fontSize=(8+Math.random()*12)+"px";
+  layer.appendChild(star);
  }
- refreshIcons();
+ document.body.prepend(layer);
 }
 
-function openMenu(){
- $("menuBtn").setAttribute
- 
+themeBtn.onclick=()=>{
+ themePanel.classList.toggle("open");
+};
+document.addEventListener("click",e=>{
+ if(!themePanel.contains(e.target)&&!themeBtn.contains(e.target)){
+  themePanel.classList.remove("open");
+ }
+});
+document.querySelectorAll(".nova-swatch").forEach(btn=>{
+ btn.onclick=()=>setNovaColor(btn.dataset.color);
+});
+themePicker.oninput=()=>setNovaColor(themePicker.value);
+effectPicker.onchange=()=>setNovaEffect(effectPicker.value);
+starsToggle.onchange=()=>setNovaStars(starsToggle.checked);
+
+document.getElementById("nova-reset").onclick=()=>{
+ setNovaColor("#6366f1");
+ effectPicker.value="normal";
+ setNovaEffect("normal");
+ starsToggle.checked=false;
+ setNovaStars(false);
+};
+
+refreshIcons();
+show("home");
+</script>
+</body>
+</html>
