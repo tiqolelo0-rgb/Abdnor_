@@ -1,434 +1,926 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#172554">
-<title>Nova | Friendship</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10152f">
+<title>Nova | Friendship Quiz</title>
+
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#090d1d;
+  --card:#151b36;
+  --card2:#1d2547;
+  --primary:#8175ff;
+  --secondary:#42d9ff;
+  --text:#f4f5ff;
+  --muted:#aab1d1;
+  --green:#38d996;
+  --red:#ff627c;
+}
+
 body{
- margin:0;min-height:100vh;min-height:100dvh;
- font-family:Arial,sans-serif;color:#fff;
- background:linear-gradient(135deg,#101d46,#3730a3,#2563eb);
- display:flex;justify-content:center;align-items:center;
- padding:75px 0 65px;overflow-x:hidden
+  min-height:100vh;
+  font-family:Arial,Tahoma,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 10%,#35266b66,transparent 35%),
+    radial-gradient(circle at 90% 90%,#12617b44,transparent 35%),
+    var(--bg);
+  padding:20px;
 }
-button{font-family:inherit;cursor:pointer;touch-action:manipulation}
-.glow{position:fixed;width:260px;height:260px;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none;animation:glow 8s infinite alternate}
-.one{background:#60a5fa;top:-70px;right:-60px}
-.two{background:#a78bfa;bottom:-80px;left:-60px}
-@keyframes glow{to{transform:translate(35px,35px) scale(1.2)}}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+  border:none;
+  transition:.2s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.1);
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.app{
+  max-width:680px;
+  margin:auto;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:8px 0 25px;
+}
+
+.logo{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:1px;
+  background:linear-gradient(90deg,#fff,var(--secondary),var(--primary));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.logo small{
+  display:block;
+  font-size:10px;
+  letter-spacing:3px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.badge{
+  border:1px solid #8175ff55;
+  background:#8175ff18;
+  color:#c9c3ff;
+  border-radius:30px;
+  padding:8px 12px;
+  font-size:12px;
+}
+
 .card{
- position:relative;z-index:2;width:min(460px,92vw);
- padding:25px 19px;text-align:center;
- border:1px solid #ffffff35;border-radius:27px;
- background:#ffffff13;backdrop-filter:blur(20px);
- box-shadow:0 20px 70px #0003;animation:enter .5s ease
+  background:linear-gradient(145deg,#171d3beF,#10152bea);
+  border:1px solid #ffffff12;
+  border-radius:24px;
+  padding:25px;
+  box-shadow:0 20px 60px #0004;
+  animation:appear .35s ease;
 }
-@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.bears{font-size:45px;margin-bottom:10px;animation:float 3s infinite ease-in-out}
-@keyframes float{50%{transform:translateY(-7px)}}
-h1{font-size:clamp(23px,6vw,30px);line-height:1.5;margin:0 0 10px}
-.desc{font-size:14px;color:#e0e7ff;line-height:1.9;margin-bottom:17px}
-.btn{width:100%;padding:13px 14px;border:0;border-radius:13px;font-size:15px;font-weight:bold;margin-top:9px;transition:transform .2s}
-.btn:active{transform:scale(.97)}
-.primary{color:#172554;background:#bfdbfe}
-.secondary{color:#fff;background:#ffffff20;border:1px solid #ffffff45}
-.hidden{display:none!important}
-label{display:block;text-align:right;font-size:13px;color:#dbeafe;margin-top:7px}
-input,textarea,select{
- width:100%;padding:12px;margin:7px 0 12px;
- border:1px solid #ffffff40;border-radius:12px;
- color:#fff;background:#263665;font:inherit;outline:none
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
 }
-input::placeholder,textarea::placeholder{color:#cbd5e1}
-textarea{resize:vertical;min-height:70px}
-select option{background:#172554}
-.counter{font-size:13px;color:#bfdbfe;margin:10px 0}
-.question-box{padding:18px 13px;border:1px solid #ffffff30;border-radius:18px;background:#ffffff10;font-size:20px;font-weight:bold;line-height:1.8;margin:18px 0}
-.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.option{
- min-width:0;min-height:130px;padding:11px 8px;
- border:2px solid #ffffff35;border-radius:20px;
- background:#ffffff12;color:#fff;display:flex;
- flex-direction:column;align-items:center;justify-content:center;gap:9px;
- transition:.2s;animation:enter .35s both
+
+.hero{
+  text-align:center;
+  padding:15px 0 25px;
 }
-.option:active{transform:scale(.97)}
-.option .art{font-size:39px}
-.option .opttext{font-size:14px;line-height:1.6}
-.option.selected{border-color:#60a5fa;background:#60a5fa30}
-.option.correct{border-color:#34d399;background:#34d39925}
-.option.wrong{border-color:#fb7185;background:#fb718525}
-.option:disabled{cursor:default}
-.notice{margin-top:13px;padding:13px;border-radius:15px;background:#ffffff13;line-height:1.8;border:1px solid #ffffff30}
-.progress-label{display:flex;justify-content:space-between;font-size:12px;color:#dbeafe}
-.number-track{display:flex;gap:5px;direction:ltr;margin:10px 0 15px}
-.num{
- flex:1;min-width:0;height:31px;border-radius:9px;
- border:1px solid #ffffff40;background:#ffffff13;
- color:#fff;font-size:12px;font-weight:bold
+
+.hero-icon{
+  font-size:68px;
+  margin-bottom:14px;
+  filter:drop-shadow(0 0 20px #8175ff66);
 }
-.num.active{background:#1688ff;border-color:#1688ff;box-shadow:0 3px 0 #0756b2}
-.num.done{background:#34d39930;border-color:#34d399;color:#bbf7d0}
-.progress{height:7px;background:#ffffff20;border-radius:20px;overflow:hidden;margin:9px 0 17px}
-.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#c4b5fd);transition:width .35s}
-.brand{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);padding:8px 17px;border:1px solid #ffffff35;border-radius:30px;background:#ffffff12;font-size:12px;font-weight:bold;letter-spacing:2px;white-space:nowrap}
-.brand span{color:#93c5fd}
-.rating-screen{animation:enter .7s ease}
-.rating-icon{font-size:58px;margin:10px 0;animation:float 1.8s infinite;filter:drop-shadow(0 0 15px #facc15aa)}
-.rating-circle{--rating:0%;width:155px;height:155px;margin:20px auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#facc15 var(--rating),#ffffff18 var(--rating));position:relative;box-shadow:0 0 30px #60a5fa40;animation:circle 1s ease}
-.rating-circle:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#172554;border:1px solid #ffffff25}
-.rating-number{z-index:1;font-size:37px;font-weight:900;color:#fde68a}
-.rating-number small{font-size:15px;color:#dbeafe}
-@keyframes circle{from{transform:rotate(-90deg) scale(.7);opacity:0}to{transform:rotate(0) scale(1);opacity:1}}
-.rating-stars{font-size:26px;letter-spacing:2px;margin:12px 0}
-.rating-stars span{display:inline-block;animation:star .4s backwards}
-.rating-stars span:nth-child(2){animation-delay:.1s}
-.rating-stars span:nth-child(3){animation-delay:.2s}
-.rating-stars span:nth-child(4){animation-delay:.3s}
-.rating-stars span:nth-child(5){animation-delay:.4s}
-@keyframes star{from{transform:scale(0)}to{transform:scale(1)}}
-.rating-message{padding:16px 12px;margin:15px 0;border:1px solid #ffffff30;border-radius:18px;background:linear-gradient(135deg,#ffffff15,#60a5fa12);line-height:2}
-.rating-message strong{color:#fde68a;font-size:18px}
-.confetti{position:fixed;top:-25px;z-index:100;pointer-events:none;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(800deg);opacity:0}}
-.small{font-size:12px;color:#cbd5e1;line-height:1.8;margin-top:12px}
-@media(max-width:360px){.card{padding:20px 12px}.option{min-height:115px}.option .art{font-size:33px}.num{font-size:10px;height:28px}}
+
+h1{
+  font-size:29px;
+  line-height:1.5;
+  margin-bottom:10px;
+}
+
+h2{
+  font-size:22px;
+  margin-bottom:8px;
+}
+
+p{
+  color:var(--muted);
+  line-height:1.8;
+  font-size:14px;
+}
+
+.gradient-text{
+  background:linear-gradient(90deg,var(--secondary),#a99cff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.actions{
+  display:grid;
+  gap:12px;
+  margin-top:24px;
+}
+
+.btn{
+  width:100%;
+  padding:15px 18px;
+  border-radius:14px;
+  font-weight:bold;
+  color:white;
+  background:linear-gradient(100deg,#7567ff,#5145d9);
+  box-shadow:0 7px 25px #6655ff25;
+}
+
+.btn.secondary{
+  background:#ffffff0a;
+  border:1px solid #ffffff1c;
+  box-shadow:none;
+}
+
+.btn.cyan{
+  background:linear-gradient(100deg,#24bddd,#3679f6);
+}
+
+.btn.danger{
+  background:#ff627c1a;
+  border:1px solid #ff627c44;
+  color:#ff91a3;
+  box-shadow:none;
+}
+
+.btn.small{
+  width:auto;
+  padding:10px 14px;
+  font-size:13px;
+}
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+  animation:appear .3s ease;
+}
+
+.field{
+  margin-top:17px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  color:#c9cdeb;
+  margin-bottom:8px;
+}
+
+input,select,textarea{
+  width:100%;
+  color:white;
+  background:#0c1127;
+  border:1px solid #ffffff1c;
+  border-radius:12px;
+  padding:13px 14px;
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px #8175ff1c;
+}
+
+select option{
+  background:#151b36;
+}
+
+textarea{
+  resize:vertical;
+  min-height:85px;
+}
+
+input::placeholder,textarea::placeholder{
+  color:#747c9e;
+}
+
+.editor-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.counter{
+  background:#8175ff20;
+  border:1px solid #8175ff44;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.editor-progress{
+  height:5px;
+  background:#ffffff12;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0 20px;
+}
+
+.editor-progress div{
+  height:100%;
+  width:10%;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  transition:width .2s;
+}
+
+.options-editor{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.option-field{
+  background:#ffffff05;
+  padding:10px;
+  border-radius:13px;
+  border:1px solid #ffffff0b;
+}
+
+.option-field label{
+  font-size:12px;
+}
+
+.option-field input{
+  padding:11px;
+}
+
+.editor-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px;
+}
+
+.editor-actions .btn{
+  padding:12px 8px;
+  font-size:13px;
+}
+
+.editor-actions .wide{
+  grid-column:1/-1;
+}
+
+.question-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.progress-track{
+  height:6px;
+  background:#ffffff12;
+  border-radius:20px;
+  overflow:hidden;
+  margin-bottom:23px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--primary),var(--secondary));
+  transition:width .3s;
+}
+
+.question-title{
+  font-size:21px;
+  line-height:1.8;
+  margin-bottom:20px;
+}
+
+.answer-list{
+  display:grid;
+  gap:11px;
+}
+
+.answer{
+  width:100%;
+  text-align:right;
+  color:white;
+  padding:15px;
+  background:#ffffff08;
+  border:1px solid #ffffff15;
+  border-radius:14px;
+  line-height:1.6;
+}
+
+.answer:hover{
+  border-color:var(--primary);
+  background:#8175ff12;
+}
+
+.answer.correct{
+  border-color:var(--green);
+  background:#38d99619;
+}
+
+.answer.wrong{
+  border-color:var(--red);
+  background:#ff627c19;
+}
+
+.feedback{
+  display:none;
+  margin-top:15px;
+  padding:13px;
+  border-radius:12px;
+  line-height:1.7;
+  font-size:14px;
+}
+
+.feedback.show{
+  display:block;
+}
+
+.feedback.good{
+  background:#38d99615;
+  color:#72f0ba;
+}
+
+.feedback.bad{
+  background:#ff627c15;
+  color:#ff9baa;
+}
+
+.next-wrap{
+  margin-top:15px;
+}
+
+.result{
+  text-align:center;
+}
+
+.score-circle{
+  width:145px;
+  height:145px;
+  margin:22px auto;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(circle,#272653,#11152c);
+  border:5px solid #8175ff;
+  box-shadow:0 0 35px #8175ff30;
+}
+
+.score-circle strong{
+  font-size:38px;
+}
+
+.score-circle span{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.notice{
+  display:none;
+  margin:14px 0 0;
+  padding:12px;
+  border-radius:12px;
+  background:#8175ff16;
+  border:1px solid #8175ff33;
+  color:#d2ceff;
+  font-size:13px;
+  line-height:1.7;
+  overflow-wrap:anywhere;
+}
+
+.notice.show{
+  display:block;
+}
+
+footer{
+  text-align:center;
+  padding:24px 0 8px;
+  color:#737b9d;
+  font-size:12px;
+}
+
+@media(max-width:480px){
+  body{padding:13px}
+  .card{padding:19px}
+  h1{font-size:25px}
+  .hero-icon{font-size:56px}
+  .options-editor{grid-template-columns:1fr}
+  .editor-actions{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
+
 <body>
-<div class="glow one"></div><div class="glow two"></div>
+<div class="app">
 
-<main class="card">
-<div class="brand">Nova <span>✦</span></div>
+<header>
+  <div class="logo">
+    NOVA
+    <small>FRIENDSHIP QUIZ</small>
+  </div>
+  <div class="badge">✦ اختبارات الصداقة</div>
+</header>
 
-<!-- شاشة إدخال الأسماء -->
-<section id="setup">
- <div class="bears">🧸💙🧸</div>
- <h1>اختبار الصداقة</h1>
- <p class="desc">أنشئ اختبارًا خاصًا بك وأرسله لصديقك! 💌</p>
- <label for="creatorName">اسم الشخص الأول (صاحب الاختبار)</label>
- <input id="creatorName" maxlength="30" placeholder="مثلاً: عبد النور">
- <label for="friendName">اسم الصديق الذي سيجيب</label>
- <input id="friendName" maxlength="30" placeholder="مثلاً: نوري">
- <button class="btn primary" id="setupNext">متابعة ←</button>
- <p class="small">أدخل الاسمين، ثم جهّز الأسئلة التي تريد أن يجيب عنها صديقك.</p>
+<!-- الصفحة الرئيسية -->
+<section id="home" class="section active">
+  <div class="card">
+    <div class="hero">
+      <div class="hero-icon">🧸</div>
+      <h1>اختبر قوة <span class="gradient-text">صداقتكم</span></h1>
+      <p>
+        أنشئ اختبارك الخاص، شاركه مع أصدقائك،
+        واكتشف من يعرفك أكثر!
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="createBtn">＋ إنشاء اختبار خاص</button>
+      <button class="btn secondary" id="joinBtn">♡ لدي رابط اختبار</button>
+    </div>
+  </div>
 </section>
 
-<!-- إنشاء الأسئلة -->
-<section id="editor" class="hidden">
- <div class="bears">📝✨</div>
- <h1>جهّز اختبارك</h1>
- <p class="desc" id="editorTitle"></p>
- <div class="counter" id="editorCount">عدد الأسئلة: 0</div>
- <label for="questionInput">السؤال</label>
- <textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك..."></textarea>
- <label>الاختيارات الأربعة</label>
- <input id="opt0" maxlength="100" placeholder="الاختيار الأول">
- <input id="opt1" maxlength="100" placeholder="الاختيار الثاني">
- <input id="opt2" maxlength="100" placeholder="الاختيار الثالث">
- <input id="opt3" maxlength="100" placeholder="الاختيار الرابع">
- <label for="correctSelect">الإجابة الصحيحة</label>
- <select id="correctSelect">
-  <option value="0">الاختيار الأول</option>
-  <option value="1">الاختيار الثاني</option>
-  <option value="2">الاختيار الثالث</option>
-  <option value="3">الاختيار الرابع</option>
- </select>
- <button class="btn secondary" id="addQuestion">➕ إضافة السؤال</button>
- <div id="editorMessage" class="notice hidden"></div>
- <button class="btn primary" id="makeLink">🔗 إنشاء رابط لصديقي</button>
- <button class="btn secondary" id="startOwn">▶️ تجربة الاختبار</button>
- <button class="btn secondary" id="backSetup">← تغيير الأسماء</button>
+<!-- صفحة إنشاء الاختبار -->
+<section id="editor" class="section">
+  <div class="card">
+
+    <div class="editor-top">
+      <div>
+        <h2>إنشاء اختبارك ✨</h2>
+        <p>خصص الأسئلة ثم شارك الرابط.</p>
+      </div>
+      <div class="counter" id="editorCounter">السؤال 1 / 10</div>
+    </div>
+
+    <div class="field">
+      <label for="creatorName">اسم صاحب الاختبار</label>
+      <input id="creatorName" maxlength="35" placeholder="مثلاً: Abdnor">
+    </div>
+
+    <div class="field">
+      <label for="targetName">اسم الصديق (اختياري)</label>
+      <input id="targetName" maxlength="35" placeholder="اتركه فارغاً ليستعمله الجميع">
+    </div>
+
+    <div class="editor-progress">
+      <div id="editorProgress"></div>
+    </div>
+
+    <div class="field">
+      <label for="questionPicker">اختر السؤال الذي تريد تعديله</label>
+      <select id="questionPicker"></select>
+    </div>
+
+    <div class="field">
+      <label for="questionInput">نص السؤال</label>
+      <textarea id="questionInput" maxlength="250" placeholder="اكتب سؤالك هنا..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>الاختيارات الأربعة</label>
+      <div class="options-editor">
+        <div class="option-field">
+          <label for="option0">الاختيار 1</label>
+          <input id="option0" maxlength="100" placeholder="الاختيار الأول">
+        </div>
+        <div class="option-field">
+          <label for="option1">الاختيار 2</label>
+          <input id="option1" maxlength="100" placeholder="الاختيار الثاني">
+        </div>
+        <div class="option-field">
+          <label for="option2">الاختيار 3</label>
+          <input id="option2" maxlength="100" placeholder="الاختيار الثالث">
+        </div>
+        <div class="option-field">
+          <label for="option3">الاختيار 4</label>
+          <input id="option3" maxlength="100" placeholder="الاختيار الرابع">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="correctPicker">ما الإجابة الصحيحة؟</label>
+      <select id="correctPicker">
+        <option value="0">الاختيار 1</option>
+        <option value="1">الاختيار 2</option>
+        <option value="2">الاختيار 3</option>
+        <option value="3">الاختيار 4</option>
+      </select>
+    </div>
+
+    <div class="editor-actions">
+      <button class="btn secondary" id="previousQuestion">← السابق</button>
+      <button class="btn secondary" id="nextQuestion">التالي →</button>
+      <button class="btn cyan wide" id="saveQuestion">✓ حفظ السؤال</button>
+      <button class="btn wide" id="shareBtn">🔗 حفظ الاختبار وإنشاء الرابط</button>
+      <button class="btn secondary wide" id="editorHome">العودة للرئيسية</button>
+    </div>
+
+    <div class="notice" id="editorNotice"></div>
+  </div>
 </section>
 
-<!-- شاشة اللعب -->
-<section id="playing" class="hidden">
- <div class="bears">🤔💭</div>
- <h1 id="gameTitle">اختبار الصداقة</h1>
- <div class="progress-label">
-  <span id="progressText">السؤال 1 من 10</span>
-  <span id="progressPercent">0%</span>
- </div>
- <div class="number-track" id="numberTrack"></div>
- <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
- <div class="question-box" id="questionText"></div>
- <div class="options" id="options"></div>
- <div id="feedback" class="notice hidden"></div>
- <button class="btn primary hidden" id="nextBtn">السؤال التالي ←</button>
- <button class="btn secondary" id="quitBtn">🏠 الرئيسية</button>
+<!-- صفحة إدخال الرابط -->
+<section id="join" class="section">
+  <div class="card">
+    <div class="hero">
+      <div class="hero-icon">🔗</div>
+      <h2>انضم إلى الاختبار</h2>
+      <p>ألصق رابط الاختبار الذي أرسله لك صديقك.</p>
+    </div>
+
+    <div class="field">
+      <label for="quizUrl">رابط الاختبار</label>
+      <textarea id="quizUrl" placeholder="ألصق الرابط هنا..."></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="openQuizBtn">ابدأ الاختبار</button>
+      <button class="btn secondary" id="joinHome">العودة للرئيسية</button>
+    </div>
+
+    <div class="notice" id="joinNotice"></div>
+  </div>
 </section>
 
-<!-- التقييم -->
-<section id="finished" class="hidden rating-screen">
- <div class="rating-icon" id="ratingIcon">🏆</div>
- <h1 id="ratingTitle">انتهى الاختبار!</h1>
- <p class="desc" id="resultSubtitle">نتيجة اختبار الصداقة من Nova ✨</p>
- <div class="rating-circle" id="ratingCircle">
-  <div class="rating-number"><span id="ratingValue">0</span><small>/10</small></div>
- </div>
- <div class="rating-stars" id="ratingStars">☆☆☆☆☆</div>
- <div class="rating-message" id="finalText"></div>
- <p class="desc" id="scoreDetails"></p>
- <button class="btn primary" id="replayBtn">🔄 إعادة الاختبار</button>
- <button class="btn secondary" id="homeBtn">🏠 الرئيسية</button>
+<!-- صفحة اللعب -->
+<section id="playing" class="section">
+  <div class="card">
+
+    <div class="question-meta">
+      <div class="badge" id="quizOwner">اختبار صداقة</div>
+      <div class="counter" id="questionCounter">1 / 10</div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="quizProgress"></div>
+    </div>
+
+    <h2 class="question-title" id="questionText"></h2>
+
+    <div class="answer-list" id="answerList"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="next-wrap">
+      <button class="btn" id="nextBtn" style="display:none">
+        السؤال التالي ←
+      </button>
+    </div>
+  </div>
 </section>
-</main>
+
+<!-- صفحة النتيجة -->
+<section id="finished" class="section">
+  <div class="card result">
+    <div class="hero-icon">🏆</div>
+    <h1>انتهى الاختبار!</h1>
+    <p id="resultMessage">هذه نتيجتك.</p>
+
+    <div class="score-circle">
+      <strong id="scoreNumber">0/10</strong>
+      <span>إجابتك الصحيحة</span>
+    </div>
+
+    <p id="resultDetails"></p>
+
+    <div class="actions">
+      <button class="btn" id="retryBtn">إعادة الاختبار</button>
+      <button class="btn cyan" id="shareResultBtn">مشاركة النتيجة</button>
+      <button class="btn secondary" id="resultHome">الرئيسية</button>
+    </div>
+
+    <div class="notice" id="resultNotice"></div>
+  </div>
+</section>
+
+<footer>Made with ✦ by Nova</footer>
+</div>
 
 <script>
-const $=id=>document.getElementById(id);
-const screens=["setup","editor","playing","finished"];
+"use strict";
 
-let creatorName="";
-let friendName="";
-let questions=[];
-let index=0;
-let score=0;
-let answered=false;
-let sharedMode=false;
+const $ = id => document.getElementById(id);
 
-const defaults=[
- {q:"على ماذا ينفق معظم ماله؟",opts:["وجبات خفيفة / طعام 🍔","لا شيء — يدّخره 💰","الألعاب 🎮","الملابس 👕"],correct:0},
- {q:"ما أكثر شيء يحبّه في وقت الفراغ؟",opts:["الألعاب 🎮","النوم 😴","الخروج 🌳","الأنمي 🍥"],correct:3},
- {q:"ما الذي يفرحه أكثر؟",opts:["هدية 🎁","رسالة من صديق 💌","وجبة لذيذة 🍕","الفوز 🏆"],correct:1},
- {q:"إذا حصل على المال، ماذا يفعل؟",opts:["يشتري شيئًا 🛍️","يدّخره 🐷","يدعو أصدقاءه 🍔","يشحن لعبة 💎"],correct:3},
- {q:"ما نوع الفيديوهات التي يحبّها؟",opts:["الأنمي ⚔️","الألعاب 🎮","الضحك 😂","كل الأنواع ✨"],correct:0},
- {q:"كيف يقضي يوم العطلة؟",opts:["ينام 😴","يلعب 🎮","يتنزه 🌳","يشاهد فيلمًا 🎬"],correct:1},
- {q:"أي هدية قد تعجبه أكثر؟",opts:["سماعات 🎧","لعبة 🎮","حلوى 🍫","هدية من صديق 💝"],correct:3},
- {q:"ماذا يفعل عندما يشعر بالملل؟",opts:["يفتح الهاتف 📱","يلعب 🎮","يتحدث مع أصدقائه 💬","ينام 😴"],correct:0},
- {q:"أين يفضّل الخروج؟",opts:["مطعم 🍔","حديقة 🌳","مركز ألعاب 🕹️","مع الأصدقاء 💙"],correct:3},
- {q:"ما الأهم في الصداقة؟",opts:["الثقة 🤝","الضحك 😂","المساعدة 💙","كل ما سبق 💖"],correct:3}
-].map(q=>({q:q.q,opts:q.opts.map(text=>({text})),correct:q.correct}));
+const defaultQuestions = [
+  { q:"ما هو لوني المفضل؟", options:["الأحمر","الأزرق","الأسود","الأخضر"], correct:2 },
+  { q:"ما هي لعبتي المفضلة؟", options:["Minecraft","Free Fire","PUBG","Roblox"], correct:1 },
+  { q:"ما هو أكثر شيء أحبه؟", options:["النوم","الأكل","اللعب","الخروج"], correct:2 },
+  { q:"ما هو نوع المحتوى الذي أحبه؟", options:["الأنمي","الرياضة","الطبخ","السفر"], correct:0 },
+  { q:"ماذا أفعل عندما أشعر بالملل؟", options:["أنام","ألعب","أقرأ","أخرج"], correct:1 },
+  { q:"ما هو مشروبي المفضل؟", options:["الماء","العصير","القهوة","المشروبات الغازية"], correct:1 },
+  { q:"ما هو الوقت الذي أفضله؟", options:["الصباح","الظهيرة","المساء","منتصف الليل"], correct:3 },
+  { q:"ما أكثر شيء يزعجني؟", options:["الكذب","الانتظار","الضجيج","الملل"], correct:0 },
+  { q:"كيف أصف نفسي؟", options:["هادئ","مرح","غامض","كل ما سبق"], correct:3 },
+  { q:"ما أهمية الصداقة بالنسبة لي؟", options:["عادية","مهمة جداً","غير مهمة","لا أعرف"], correct:1 }
+];
 
-function show(id){
- screens.forEach(s=>$(s).classList.toggle("hidden",s!==id));
- window.scrollTo({top:0,behavior:"smooth"});
-}
-function safeText(s){
- return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function normalize(s){
- return s.trim().toLowerCase().replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/\s+/g," ");
-}
-function updateEditorCount(){
- $("editorCount").textContent="عدد الأسئلة: "+questions.length;
-}
-function fillEditor(){
- const q=questions[questions.length-1];
- if(!q)return;
- $("questionInput").value=q.q;
- q.opts.forEach((o,i)=>$("opt"+i).value=o.text);
- $("correctSelect").value=String(q.correct);
-}
-function readEditor(){
- const q=$("questionInput").value.trim();
- const opts=[0,1,2,3].map(i=>$("opt"+i).value.trim());
- if(!q||opts.some(o=>!o)){
-  editorMessage("⚠️ اكتب السؤال وجميع الاختيارات الأربعة.");
-  return null;
- }
- return {q,opts:opts.map(text=>({text})),correct:Number($("correctSelect").value)};
-}
-function editorMessage(text){
- $("editorMessage").textContent=text;
- $("editorMessage").classList.remove("hidden");
-}
-$("setupNext").onclick=()=>{
- creatorName=$("creatorName").value.trim();
- friendName=$("friendName").value.trim();
- if(!creatorName||!friendName){
-  alert("اكتب اسمك واسم صديقك أولاً 😊");return;
- }
- questions=structuredClone(defaults);
- updateEditorCount();
- $("editorTitle").textContent="اختبار صداقتك مع "+friendName+" 💙";
- fillEditor();
- show("editor");
-};
-$("backSetup").onclick=()=>show("setup");
+let questions = cloneQuestions(defaultQuestions);
+let currentQuestion = 0;
+let quizData = null;
+let playerName = "";
+let playerAnswers = [];
+let score = 0;
+let answered = false;
+let autoNextTimer = null;
+let lastResultText = "";
+let lastResultTitle = "";
 
-$("addQuestion").onclick=()=>{
- const q=readEditor();
- if(!q)return;
- if(questions.length>=10){
-  editorMessage("وصلت إلى 10 أسئلة. يمكنك تعديل أي سؤال من الأسئلة الحالية.");
-  return;
- }
- questions[questions.length-1]=q;
- if(questions.length===10){
-  editorMessage("تم حفظ السؤال. وصلت إلى 10 أسئلة.");
-  updateEditorCount();return;
- }
- questions.push({q:"سؤال جديد",opts:[{text:"الاختيار الأول"},{text:"الاختيار الثاني"},{text:"الاختيار الثالث"},{text:"الاختيار الرابع"}],correct:0});
- updateEditorCount();
- fillEditor();
- editorMessage("✅ تم حفظ السؤال. أكمل السؤال التالي.");
-};
+function cloneQuestions(data){
+  return data.map(q => ({
+    q: q.q,
+    options: [...q.options],
+    correct: q.correct
+  }));
+}
 
-function encodeData(obj){
- const bytes=new TextEncoder().encode(JSON.stringify(obj));
- let bin="";bytes.forEach(b=>bin+=String.fromCharCode(b));
- return btoa(bin);
+function showSection(id){
+  document.querySelectorAll(".section").forEach(section=>{
+    section.classList.remove("active");
+  });
+  $(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-function decodeData(s){
- const bin=atob(s);
- return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))));
-}
-function validQuiz(d){
- return d&&typeof d.creator==="string"&&typeof d.friend==="string"&&Array.isArray(d.questions)&&d.questions.length>0&&d.questions.length<=10&&d.questions.every(q=>q&&typeof q.q==="string"&&Array.isArray(q.opts)&&q.opts.length===4&&q.opts.every(o=>o&&typeof o.text==="string")&&Number.isInteger(q.correct)&&q.correct>=0&&q.correct<4);
-}
-async function shareLink(){
- const q=readEditor();
- if(!q)return;
- questions[questions.length-1]=q;
- if(!questions.length){editorMessage("أضف سؤالاً أولاً.");return}
- const payload={creator:creatorName,friend:friendName,questions};
- const url=new URL(location.href);
- url.hash="quiz="+encodeData(payload);
- try{
-  await navigator.clipboard.writeText(url.href);
-  editorMessage("✅ تم نسخ الرابط! أرسله إلى "+friendName+".");
- }catch(e){
-  const field=document.createElement("textarea");
-  field.value=url.href;
-  $("editorMessage").replaceChildren(field);
-  editorMessage("انسخ الرابط التالي وأرسله لصديقك:");
-  $("editorMessage").appendChild(field);
-  field.select();
- }
-}
-$("makeLink").onclick=shareLink;
 
-function startQuiz(){
- if(!questions.length){show("editor");return}
- index=0;score=0;answered=false;
- $("gameTitle").textContent="اختبار صداقتك مع "+friendName;
- show("playing");
- renderQuestion();
+function showNotice(id,message){
+  const box = $(id);
+  box.textContent = message;
+  box.classList.add("show");
 }
-$("startOwn").onclick=()=>{
- const q=readEditor();if(!q)return;
- questions[questions.length-1]=q;
- sharedMode=false;
- startQuiz();
-};
 
-function renderQuestion(){
- answered=false;
- const q=questions[index];
- $("progressText").textContent="السؤال "+(index+1)+" من "+questions.length;
- const percent=Math.round(index/questions.length*100);
- $("progressPercent").textContent=percent+"%";
- $("progressFill").style.width=percent+"%";
- $("questionText").textContent=q.q;
- $("feedback").classList.add("hidden");
- $("nextBtn").classList.add("hidden");
- $("options").innerHTML="";
- const track=$("numberTrack");track.innerHTML="";
- for(let i=0;i<10;i++){
-  const b=document.createElement("div");
-  b.className="num"+(i===index?" active":i<index?" done":"");
-  b.textContent=i+1;
-  b.style.display=i<questions.length?"block":"none";
-  track.appendChild(b);
- }
- q.opts.forEach((opt,i)=>{
-  const b=document.createElement("button");
-  b.className="option";
-  const art=document.createElement("div");art.className="art";
-  art.textContent=["🧸","💙","✨","🎮"][i];
-  const txt=document.createElement("div");txt.className="opttext";
-  txt.textContent=opt.text;
-  b.append(art,txt);
-  b.onclick=()=>choose(i);
-  $("options").appendChild(b);
- });
+function hideNotice(id){
+  $(id).classList.remove("show");
 }
-function choose(choice){
- if(answered)return;
- answered=true;
- const q=questions[index];
- const correct=choice===q.correct;
- if(correct)score++;
- [...$("options").children].forEach((b,i)=>{
-  b.disabled=true;
-  if(i===q.correct)b.classList.add("correct");
-  if(i===choice&&i!==q.correct)b.classList.add("wrong");
- });
- $("feedback").classList.remove("hidden");
- $("feedback").textContent=correct?"🎉 إجابة صحيحة! برافو!":"💙 الإجابة الصحيحة: "+q.opts[q.correct].text;
- $("progressFill").style.width=((index+1)/questions.length*100)+"%";
- $("progressPercent").textContent=Math.round((index+1)/questions.length*100)+"%";
- $("progressText").textContent="تمت الإجابة عن "+(index+1)+" من "+questions.length;
- const nums=[...$("numberTrack").children];
- if(nums[index])nums[index].classList.add("done");
- $("nextBtn").classList.remove("hidden");
- $("nextBtn").textContent=index===questions.length-1?"🏆 عرض التقييم":"السؤال التالي ←";
-}
-$("nextBtn").onclick=()=>{
- if(!answered)return;
- if(index<questions.length-1){index++;renderQuestion()}
- else showResult();
-};
-function showResult(){
- const rating=Math.round(score/questions.length*10);
- $("ratingValue").textContent=rating;
- $("ratingCircle").style.setProperty("--rating",rating*10+"%");
- const stars=Math.round(rating/2);
- $("ratingStars").innerHTML=Array.from({length:5},(_,i)=>`<span>${i<stars?"⭐":"☆"}</span>`).join("");
- $("scoreDetails").textContent="الإجابات الصحيحة: "+score+" من "+questions.length;
- $("resultSubtitle").textContent="نتيجة اختبار "+creatorName+" و"+friendName+" ✨";
- if(rating<5){
-  $("ratingIcon").textContent="💙";
-  $("ratingTitle").textContent="بداية جميلة!";
-  $("finalText").innerHTML="<strong>ما تستسلمش! 🧸</strong><br>يمكنك إعادة الاختبار وتحسين نتيجتك.";
- }else if(rating<8){
-  $("ratingIcon").textContent="🔥";
-  $("ratingTitle").textContent="نتيجة مليحة!";
-  $("finalText").innerHTML="<strong>راك تعرف صديقك مليح! 😎</strong><br>باقي شوية وتولي أسطورة 💙";
- }else{
-  $("ratingIcon").textContent="👑";
-  $("ratingTitle").textContent="أسطورة Nova!";
-  $("finalText").innerHTML="<strong>نتيجة خرافية! 🏆</strong><br>معرفة قوية بالصداقة! 👑✨";
- }
- show("finished");
- if(rating>=5)confetti();
-}
-function confetti(){
- const colors=["#facc15","#60a5fa","#c084fc","#fb7185","#34d399"];
- for(let i=0;i<55;i++){
-  const p=document.createElement("div");p.className="confetti";
-  p.textContent=Math.random()>.5?"✦":"●";
-  p.style.left=Math.random()*100+"vw";
-  p.style.color=colors[Math.floor(Math.random()*colors.length)];
-  p.style.fontSize=(10+Math.random()*13)+"px";
-  p.style.animationDuration=(2+Math.random()*3)+"s";
-  p.style.animationDelay=Math.random()+"s";
-  document.body.appendChild(p);setTimeout(()=>p.remove(),6500);
- }
-}
-$("quitBtn").onclick=()=>show("setup");
-$("homeBtn").onclick=()=>show("setup");
-$("replayBtn").onclick=startQuiz;
 
-// إذا فتح الصديق رابطًا مرسلًا من الشخص الأول
-const incoming=location.hash.match(/^#quiz=(.+)$/);
-if(incoming){
- try{
-  const data=decodeData(incoming[1]);
-  if(validQuiz(data)){
-   creatorName=data.creator;
-   friendName=data.friend;
-   questions=data.questions;
-   sharedMode=true;
-   $("gameTitle").textContent="اختبار صداقتك مع "+friendName;
-   startQuiz();
+function encodeData(data){
+  const bytes = new TextEncoder().encode(JSON.stringify(data));
+  let binary = "";
+  bytes.forEach(byte => binary += String.fromCharCode(byte));
+  return btoa(binary);
+}
+
+function decodeData(encoded){
+  const binary = atob(encoded);
+  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+function validateQuiz(data){
+  if(!data || !Array.isArray(data.questions)) return false;
+  if(data.questions.length < 1 || data.questions.length > 50) return false;
+
+  return data.questions.every(q =>
+    typeof q.q === "string" &&
+    q.q.trim().length > 0 &&
+    Array.isArray(q.options) &&
+    q.options.length === 4 &&
+    q.options.every(o => typeof o === "string" && o.trim().length > 0) &&
+    Number.isInteger(q.correct) &&
+    q.correct >= 0 && q.correct <= 3
+  );
+}
+
+function clearAutoNext(){
+  if(autoNextTimer !== null){
+    clearTimeout(autoNextTimer);
+    autoNextTimer = null;
   }
- }catch(e){}
 }
-</script>
-</body>
-</html>
+
+/* الصفحة الرئيسية */
+$("createBtn").onclick = () => {
+  questions = cloneQuestions(defaultQuestions);
+  $("creatorName").value = "";
+  $("targetName").value = "";
+  populateQuestionPicker();
+  loadQuestion(0);
+  hideNotice("editorNotice");
+  showSection("editor");
+};
+
+$("joinBtn").onclick = () => {
+  $("quizUrl").value = "";
+  hideNotice("joinNotice");
+  showSection("join");
+};
+
+$("editorHome").onclick = () => showSection("home");
+$("joinHome").onclick = () => showSection("home");
+$("resultHome").onclick = () => {
+  clearAutoNext();
+  showSection("home");
+};
+
+/* محرر الأسئلة */
+function populateQuestionPicker(){
+  const picker = $("questionPicker");
+  picker.innerHTML = "";
+
+  questions.forEach((question, index) => {
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = "السؤال " + (index + 1);
+    picker.appendChild(option);
+  });
+}
+
+function loadQuestion(index){
+  currentQuestion = index;
+  const question = questions[index];
+
+  $("questionPicker").value = index;
+  $("questionInput").value = question.q;
+
+  question.options.forEach((option, i) => {
+    $("option" + i).value = option;
+  });
+
+  $("correctPicker").value = question.correct;
+  $("editorCounter").textContent = "السؤال " + (index + 1) + " / " + questions.length;
+  $("editorProgress").style.width = ((index + 1) / questions.length * 100) + "%";
+
+  $("previousQuestion").disabled = index === 0;
+  $("nextQuestion").disabled = index === questions.length - 1;
+}
+
+function saveCurrentQuestion(showMessage = true){
+  const q = $("questionInput").value.trim();
+  const options = [0,1,2,3].map(i => $("option" + i).value.trim());
+  const correct = Number($("correctPicker").value);
+
+  if(!q){
+    if(showMessage) showNotice("editorNotice","اكتب نص السؤال أولاً.");
+    return false;
+  }
+
+  if(options.some(option => !option)){
+    if(showMessage) showNotice("editorNotice","يرجى ملء الاختيارات الأربعة.");
+    return false;
+  }
+
+  questions[currentQuestion] = { q, options, correct };
+
+  if(showMessage){
+    showNotice("editorNotice","تم حفظ السؤال بنجاح ✓");
+  }
+
+  return true;
+}
+
+$("saveQuestion").onclick = () => {
+  saveCurrentQuestion(true);
+};
+
+$("questionPicker").onchange = () => {
+  const newIndex = Number($("questionPicker").value);
+
+  if(!saveCurrentQuestion(false)){
+    $("questionPicker").value = currentQuestion;
+    showNotice("editorNotice","أكمل السؤال والاختيارات قبل الانتقال.");
+    return;
+  }
+
+  hideNotice("editorNotice");
+  loadQuestion(newIndex);
+};
+
+$("previousQuestion").onclick = () => {
+  if(!saveCurrentQuestion()) return;
+  if(currentQuestion > 0) loadQuestion(currentQuestion - 1);
+};
+
+$("nextQuestion").onclick = () => {
+  if(!saveCurrentQuestion()) return;
+  if(currentQuestion < questions.length - 1){
+    loadQuestion(currentQuestion + 1);
+  }
+};
+
+/* إنشاء رابط الاختبار */
+$("shareBtn").onclick = async () => {
+  if(!saveCurrentQuestion()) return;
+
+  const creator = $("creatorName").value.trim();
+  const target = $("targetName").value.trim();
+
+  if(!creator){
+    showNotice("editorNotice","اكتب اسم صاحب الاختبار أولاً.");
+    $("creatorName").focus();
+    return;
+  }
+
+  const data = {
+    version: 1,
+    creator,
+    target,
+    questions: cloneQuestions(questions)
+  };
+
+  let link;
+
+  try{
+    link = location.href.split("#")[0] + "#quiz=" + encodeData(data);
+  }catch(error){
+    showNotice("editorNotice","تعذر إنشاء الرابط. حاول مجدداً.");
+    return;
+  }
+
+  try{
+    await copyText(link);
+    showNotice("editorNotice","تم إنشاء الرابط ونسخه! أرسله لأصدقائك عبر الرسائل.");
+  }catch(error){
+    showNotice("editorNotice","تم إنشاء الرابط، انسخه من المربع أدناه.");
+  }
+
+  let linkBox = $("generatedLink");
+
+  if(!linkBox){
+    linkBox = document.createElement("textarea");
+    linkBox.id = "generatedLink";
+    linkBox.readOnly = true;
+    linkBox.style.marginTop = "12px";
+    $("editorNotice").after(linkBox);
+  }
+
+  linkBox.value = link;
+  linkBox.style.display = "block";
+  linkBox.onclick = () => linkBox.select();
+};
+
+/* فتح رابط الاختبار (محسّنة بالكامل لقراءة الروابط بدقة) */
+function extractQuizFromLink(text){
+  const input = text.trim();
+  let encoded = "";
+
+  if(input.startsWith("#quiz=")){
+    encoded = input.slice(6);
+  } else {
+    try{
+      let urlStr = input;
+      if(!urlStr.startsWith("http://") && !urlStr.startsWith("https://")){
+        urlStr = "https://" + urlStr;
+      }
+      const url = new URL(urlStr);
+      if(url.hash.startsWith("#quiz=")){
+        encoded = url.hash.slice(6);
+      }
+    }catch(error){
+      const match = input.match(/#quiz=([A-Za-z0-9+/=]+)/);
+      if(match && match[1]){
+        encoded = match[1];
+      }
+    }
+  }
+
+  if(!encoded) throw new Error("الرابط غير صحيح أو لا يحتوي على اختبار.");
+
+  const data = decodeData(encoded);
+
+  if(!validateQuiz(data)){
+    throw new Error("بيانات الاختبار غير مكتملة أو غير صالحة.");
+  }
+
+  return data;
+}
+
+$("openQuizBtn").onclick = () =
